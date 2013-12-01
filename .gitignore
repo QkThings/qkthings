@@ -1,0 +1,15 @@
+embedded/shared/
+software/shared/
+*/shared/
+*shared*
+*.*~
+*.a
+*.o
+*.d
+*.bin
+*.out
+*.map
+*.lst
+*.zip
+*.tar.gz
+*.rar
