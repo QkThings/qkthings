@@ -1,6 +1,6 @@
 # QkThings
 
-![](logo.png "QkThings")
+![](/logo.png "QkThings")
 
 QkThings is both a **framework** and a **modular prototyping platform** for **smart devices**. 
 
