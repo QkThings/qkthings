@@ -1,5 +1,6 @@
 embedded/shared/
 software/shared/
+output/
 */shared/
 *shared*
 *.*~
@@ -13,15 +14,3 @@ software/shared/
 *.zip
 *.tar.gz
 *.rar
-
-* asd
-	* qwe
-
-
-	qkthings
-	  embedded
-	    shared/toolchain
-	    (repos)
-	  software
-	    (repos)
-	  hardware   
