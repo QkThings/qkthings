@@ -6,4 +6,6 @@ This is the main git repository of QkThings. This is also a private repo and sin
 
 To get started with the development of QkThings, please use the **wiki** (see the tabs above).
 
+## Contribute
 
+When cloning a repository, make sure you clone the **develop** branch so you get the latest changes. Do whatever changes you want and if you can improve the code or add new features don't hesitate to make a **pull request**.
