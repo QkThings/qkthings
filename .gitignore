@@ -1,7 +1,7 @@
 embedded/shared/
 software/shared/
 software/tools/
-deploy*/
+output/
 */shared/
 *shared*
 *.*~
