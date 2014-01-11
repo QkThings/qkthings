@@ -1,5 +1,6 @@
 embedded/shared/
 software/shared/
+software/tools/
 deploy*/
 */shared/
 *shared*
@@ -14,15 +15,3 @@ deploy*/
 *.zip
 *.tar.gz
 *.rar
-
-* asd
-	* qwe
-
-
-	qkthings
-	  embedded
-	    shared/toolchain
-	    (repos)
-	  software
-	    (repos)
-	  hardware   
