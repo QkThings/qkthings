@@ -1,0 +1,16 @@
+<Installer>
+	<Name>qkthings</Name>
+	<Version>alpha</Version>
+	<Title>qkthings</Title>
+	<Publisher>qkthings</Publisher>
+	<ProductUrl>http://www.qkthings.com</ProductUrl>
+	<Logo>logo.png</Logo>
+	<RunProgram></RunProgram>
+	<RunProgramArguments></RunProgramArguments>
+	<RunProgramDescription></RunProgramDescription>
+	<StartMenuDir>qkthings</StartMenuDir>
+	<UninstallerName>uninstall_qkthings</UninstallerName>
+	<AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+	<TargetDir>@homeDir@/qkthings</TargetDir>
+	<AdminTargetDir>@rootDir@/qkthings</AdminTargetDir>
+</Installer>

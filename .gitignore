@@ -1,5 +1,6 @@
 embedded/shared/
 software/shared/
+software/tools/
 output/
 */shared/
 *shared*
