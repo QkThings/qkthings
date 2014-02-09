@@ -1,11 +1,8 @@
-![](https://bitbucket.org/qkthings/qkthings/raw/c7507ee32274d508f10bf4526b042aa215aaf04a/logo.png "QkThings")
+![](https://bitbucket.org/qkthings/qkthings/raw/cc587595d7a9f9e20175946998d50745d654dd54/logo.png "qkthings")
 
-QkThings is both a **framework** and a **modular prototyping platform** for **smart devices**. 
+The **framework** and a **modular prototyping platform** for **smart devices**. 
 
-This is the main git repository of QkThings. This is also a private repo and since you are able to read this text, I guess you are a very important person. Feel free to contribute and share your opinions. 
+This is the main git repository of qkthings.
 
-To get started with the development of QkThings, please use the **wiki** (see the tabs above).
+To get started please use the **wiki** (see the tabs above).
 
-## Contribute
-
-When cloning a repository, make sure you clone the **develop** branch so you get the latest changes. Do whatever changes you want and if you can improve the code or add new features don't hesitate to make a **pull request**.
