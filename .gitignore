@@ -4,6 +4,7 @@ software/tools/
 output/
 */shared/
 *shared*
+*.so*
 *.*~
 *.a
 *.o
