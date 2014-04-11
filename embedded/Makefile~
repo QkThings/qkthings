@@ -11,9 +11,14 @@ TOOLCHAIN_DIR = shared/toolchain
 .SUFFIXES:
 .PHONY: all clean upload
 
-ifeq ($(PROJECT),)
-  $(error PROJECT or TEST must be defined)
+ifeq ($(TEST),)
+  ifeq ($(PROJECT),)
+#    $(error PROJECT or TEST must be defined)
+  endif
 endif
+
+${info PROJECT = '$(PROJECT)'}
+${info TEST = '$(TEST)'}
 
 PROJECT_NAME=$(PROJECT)
 BUILD_DIR = $(PROJECT_NAME)/build
@@ -38,9 +43,11 @@ get_target_variant = $(or $(word 2,$(subst ., ,$1)),$(value 2))
 
 TARGET_NAME=$(call get_target_name,$(TARGET))
 TARGET_VARIANT=$(call get_target_variant,$(TARGET),$(TARGET_NAME))
-TARGET_DIR=$(BUILD_DIR)/target
+#TARGET_DIR=$(BUILD_DIR)/target
 
-TARGET_GLOBAL=target/$(TARGET_NAME).mk
+TARGET_BOARD=target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
+TARGET_CPU=target/$(TARGET_NAME)/$(TARGET_NAME).mk
+TARGET_GLOBAL= $(TARGET_BOARD) $(TARGET_CPU)
 
 OPTIMIZE = 0
 OFORMAT = binary
@@ -80,14 +87,56 @@ SHELLNAMES := $(ComSpec)$(COMSPEC)
 # DIRS AND FLAGS                     
 ####################################################################
 
-include $(BUILD_DIR)/$(PROJECT_NAME).mk
+ifeq ($(TEST),)
+include $(PROJECT_NAME)/build/$(PROJECT_NAME).mk
+else
+#-----------------------------
+PROJECT_NAME=$(TEST)
+include $(TARGET_GLOBAL)
+#BOARD  = EFM32G_OLIMEX
+#DEVICE = EFM32G210F128
+#HAS_BOOT = 1
+BUILD_TARGET=BUILD_DEVICE
+CFLAGS += -D$(BUILD_TARGET)
+#include $(TARGET_GLOBAL)
+QKPROGRAM_LIB_DIR = qkprogram/build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
+LIBS += -L$(QKPROGRAM_LIB_DIR) -lqkprogram
+INCLUDE_DIR += \
+qkprogram/include
+
+
+
+
+#C_SRC += test/$(TEST).c
+#-----------------------------
+endif
 
 CFLAGS += -O$(OPTIMIZE) -g3 -Wall
 LIBS += -lm
 ARFLAGS = rcs
 
+#include qkprogram/build/qkprogram.mk
+
 INCLUDEPATHS = $(addprefix -I, $(INCLUDE_DIR))
-C_SRC = $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
+C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
+C_SRC += $(MAIN)
+
+ifneq ($(TEST),)
+
+C_SRC += test/$(TEST).c
+#include qkprogram/build/qkprogram.mk
+
+#C_SRC += \
+#$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/system_efm32g.c \
+#$(ENERGYMICRO)/emlib/src/em_system.c \
+#$(ENERGYMICRO)/emlib/src/em_gpio.c \
+#$(ENERGYMICRO)/emlib/src/em_usart.c
+endif
+
+#include qkprogram/build/qkprogram.mk
+#include $(BUILD_DIR)/$(PROJECT_NAME).mk
+
+
 
 # Create directories and do a clean which is compatible with parallell make
 $(shell mkdir $(OBJ_DIR)>$(NULLDEVICE) 2>&1)

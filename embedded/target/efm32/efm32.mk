@@ -2,6 +2,24 @@
 # qkthings
 ###############################################################################
 
+# Requires:
+# DEVICE
+# BOARD
+# TOOLCHAIN_DIR
+
+###############################################################################
+# MESSAGES
+###############################################################################
+ifeq ($(HAS_BOOT),1)
+    ${info Bootloader enabled}
+else
+    ${info Bootloader disabled}
+endif
+
+###############################################################################
+# PATHS
+###############################################################################
+
 ENERGYMICRO = $(TOOLCHAIN_DIR)/common/energymicro
 #WINDOWSCS  ?= GNU Tools ARM Embedded\4.7 2013q1
 #LINUXCS    ?= /home/mribeiro/gcc-arm-none-eabi-4_7-2013q1
@@ -37,13 +55,24 @@ else
   endif
 endif
 
-
 CC      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-gcc$(QUOTE)
 LD      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-ld$(QUOTE)
 AR      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-ar$(QUOTE)
 OBJCOPY = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-objcopy$(QUOTE)
 DUMP    = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-objdump$(QUOTE)
 PSIZE	= $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-size$(QUOTE)
+
+
+
+INCLUDE_DIR += \
+$(ENERGYMICRO)/CMSIS/Include \
+$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Include \
+$(ENERGYMICRO)/emlib/inc
+
+#C_SRC += \
+#$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/system_efm32g.c
+
+#S_SRC += $(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/GCC/startup_efm32g.S
 
 ###############################################################################
 # FLAGS

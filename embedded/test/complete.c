@@ -78,7 +78,7 @@ void test_sample()
   QK_DEBUG("test_sample() [called %d times]", ++count);
 
 #if defined( QK_IS_DEVICE )
-  if(qk_data_type() == QK_DATA_TYPE_FLOAT)
+  if(qk_data_get_type() == QK_DATA_TYPE_FLOAT)
   {
     dat0_f += 0.1;
     dat1_f += 0.1;
@@ -126,7 +126,7 @@ void qk_setup()
 
   // Configurations
   qk_setConfigCount(CFG_COUNT);
-  qk_config_set_buffer(cfg_buf);
+  qk_config_set_buffer(cfg_buf, CFG_COUNT);
   qk_set_config_callback(test_config);
 
   qk_config_set_label(CFG_TEST_INT, "INT");
