@@ -75,10 +75,11 @@ float args[2];
 
 void test_sample()
 {
-  QK_DEBUG("test_sample() [called %d times]", ++count);
+/*  QK_DEBUG("test_sample() [called %d times]", ++count);
 
 #if defined( QK_IS_DEVICE )
-  if(qk_data_get_type() == QK_DATA_TYPE_FLOAT)
+  if(1)
+//  if(qk_data_get_type() == QK_DATA_TYPE_FLOAT)
   {
     dat0_f += 0.1;
     dat1_f += 0.1;
@@ -108,7 +109,7 @@ void test_sample()
 
   qk_event_generate(EVT_SAMPLE, args, 2, "sample event fired! %0 %1");
 #endif
-
+*/
 }
 
 void isr()
@@ -126,7 +127,7 @@ void qk_setup()
 
   // Configurations
   qk_setConfigCount(CFG_COUNT);
-  qk_config_set_buffer(cfg_buf, CFG_COUNT);
+//  qk_config_set_buffer(cfg_buf, CFG_COUNT);
   qk_set_config_callback(test_config);
 
   qk_config_set_label(CFG_TEST_INT, "INT");

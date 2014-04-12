@@ -17,14 +17,14 @@ DUMP    = $(TOOLCHAIN_DIR)/win/avr/bin/avr-objdump
 PSIZE	= $(TOOLCHAIN_DIR)/win/avr/bin/avr-size
 endif
 
-OPTIMIZE = s
+#OPTIMIZE = s
 FORMAT = ihex
 
 ###############################################################################
 # CPU
 ###############################################################################
-MCU = atmega328p
-F_CPU = 16000000
+#MCU = atmega328p
+#F_CPU = 16000000
 
 ###############################################################################
 # SOURCE
@@ -44,13 +44,13 @@ LDFLAGS += -Wl,-u,vfprintf -lprintf_min # enable printf
 #LDFLAGS += -Wl,-u,vfprintf -lprintf_flt -lm # printf with floating point support
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
-CFLAGS += -std=gnu99 -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -W -Wall -Wextra
+CFLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -W -Wall -Wextra
 
 ###############################################################################
 # AVRDUDE
 ###############################################################################
-PORT = COM19
-UPLOAD_RATE = 115200
+#PORT = COM19
+#UPLOAD_RATE = 115200
 ifeq ($(SHELLNAMES),)
 AVRDUDE = $(TOOLCHAIN_DIR)/linux/avr/avrdude
 else

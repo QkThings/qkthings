@@ -54,7 +54,7 @@ TARGET_BOARD=target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
 TARGET_CPU=target/$(TARGET_NAME)/$(TARGET_NAME).mk
 TARGET_GLOBAL= $(TARGET_BOARD) $(TARGET_CPU)
 
-OPTIMIZE = 0
+OPTIMIZE = s
 OFORMAT = binary
 
 # Try autodetecting the environment
