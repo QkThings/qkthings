@@ -1,13 +1,12 @@
 #include <qk_program.h>
 
-/*void qk_setup()
+void qk_setup()
 {
   qk_board_set_name("test simple");
-}*/
+}
 
 int main()
 {
-//  return qk_main();
-	return 0;
+  return qk_main();
 }
 
