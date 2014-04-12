@@ -148,13 +148,12 @@ OFORMAT = binary
 # DIRS AND FLAGS                     
 ####################################################################
 #($(and $(APP),$(TEST)),)
-ifeq ($(MAKECMDGOALS),)
+ifeq ($(MAKECMDGOALS),lib)
 #-------------------------------------------------------------------
   include $(PROJECT_NAME)/build/$(PROJECT_NAME).mk
 #-------------------------------------------------------------------
 else
 #-------------------------------------------------------------------
-
 CFLAGS += -DBUILD_DEVICE
 #QKPROGRAM_LIB_DIR = qkprogram/build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
 
@@ -174,7 +173,9 @@ INCLUDE_DIR += \
 $(APP)
 C_SRC_DIR += \
 $(APP)
-else
+endif
+
+ifeq ($(MAKECMDGOALS),test)
 C_SRC += test/$(TEST).c
 endif
 #-------------------------------------------------------------------
@@ -189,8 +190,10 @@ C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
 
 # Create directories and do a clean which is compatible with parallell make
 $(shell mkdir -p $(OBJ_DIR)>$(NULLDEVICE) 2>&1)
+ifneq ($(MAKECMDGOALS),lib)
 $(shell mkdir -p $(BIN_DIR)>$(NULLDEVICE) 2>&1)
-ifeq ($(TEST),)
+endif
+ifeq ($(MAKECMDGOALS),lib)
   $(shell mkdir -p $(LIB_DIR)>$(NULLDEVICE) 2>&1)
 endif
 ifeq (clean,$(findstring clean, $(MAKECMDGOALS)))
@@ -255,7 +258,6 @@ $(LIB_DIR)/lib$(PROJECT_NAME).a: $(OBJS)
 $(BIN_DIR)/$(PROJECT_NAME).bin: $(BIN_DIR)/$(PROJECT_NAME).out
 	@echo Creating binary file
 	$(OBJCOPY) -O $(OFORMAT) $(BIN_DIR)/$(PROJECT_NAME).out $(BIN_DIR)/$(PROJECT_NAME).bin
-	$(RMDIRS) $(OBJ_DIR) 
 	$(PSIZE) $(BIN_DIR)/$(PROJECT_NAME).out
 # Uncomment next line to produce assembly listing of entire program
 #	$(DUMP) -h -S -C $(BIN_DIR)/$(PROJECT_NAME).out>$(LST_DIR)/$(PROJECT_NAME)out.lst

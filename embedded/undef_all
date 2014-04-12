@@ -1,0 +1,4 @@
+export TARGET=
+export LIB=
+export TEST=
+export APP=

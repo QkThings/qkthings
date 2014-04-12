@@ -29,36 +29,7 @@ ENERGYMICRO = $(TOOLCHAIN_DIR)/common/energymicro
 #WINDOWSCS  ?= GNU Tools ARM Embedded\4.7 2013q1
 #LINUXCS    ?= /home/mribeiro/gcc-arm-none-eabi-4_7-2013q1
 
-# Try autodetecting the environment
-ifeq ($(SHELLNAMES),)
-  # Assume we are making on a Linux platform
-  #TOOLDIR := $(LINUXCS)
-  TOOLDIR := $(TOOLCHAIN_DIR)/linux/arm/gcc
-else
-  QUOTE :="
-  ifneq ($(COMSPEC),)
-    # Assume we are making on a mingw/msys/cygwin platform running on Windows
-    # This is a convenient place to override TOOLDIR, DO NOT add trailing
-    # whitespace chars, they do matter !
-    #TOOLDIR := $(PROGRAMFILES)/$(WINDOWSCS)
-    TOOLDIR := $(TOOLCHAIN_DIR)/win/arm/gcc
-    ifeq ($(findstring cygdrive,$(shell set)),)
-      # We were not on a cygwin platform
-      NULLDEVICE := NUL
-    endif
-  else
-    # Assume we are making on a Windows platform
-    # This is a convenient place to override TOOLDIR, DO NOT add trailing
-    # whitespace chars, they do matter !
-    SHELL      := $(SHELLNAMES)
-    #TOOLDIR    := $(ProgramFiles)/$(WINDOWSCS)
-    TOOLDIR := $(TOOLCHAIN_DIR)/win/arm/gcc
-    RMDIRS     := rd /s /q
-    RMFILES    := del /s /q
-    ALLFILES   := \*.*
-    NULLDEVICE := NUL
-  endif
-endif
+TOOLDIR := $(TOOLCHAIN_DIR)/linux/arm/gcc
 
 CC      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-gcc$(QUOTE)
 LD      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-ld$(QUOTE)
@@ -67,17 +38,10 @@ OBJCOPY = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-objcopy$(QUOTE)
 DUMP    = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-objdump$(QUOTE)
 PSIZE	= $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-size$(QUOTE)
 
-
-
 INCLUDE_DIR += \
 $(ENERGYMICRO)/CMSIS/Include \
 $(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Include \
 $(ENERGYMICRO)/emlib/inc
-
-#C_SRC += \
-#$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/system_efm32g.c
-
-#S_SRC += $(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/GCC/startup_efm32g.S
 
 ###############################################################################
 # FLAGS
@@ -86,7 +50,7 @@ $(ENERGYMICRO)/emlib/inc
 # -MMD : Don't generate dependencies on system header files.
 # -MP  : Add phony targets, useful when a h-file is removed from a project.
 # -MF  : Specify a file to write the dependencies to.
-DEPFLAGS = -MMD -MP -MF $(@:.o=.d)
+#DEPFLAGS = -MMD -MP -MF $(@:.o=.d)
 
 # Add -Wa,-ahld=$(LST_DIR)/$(@F:.o=.lst) to CFLAGS to produce assembly list files
 # -DDEBUG_EFM -DNDEBUG
