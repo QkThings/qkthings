@@ -8,7 +8,7 @@ TOOLCHAIN_DIR = shared/toolchain
 # CHECK                                                      
 ####################################################################
 ifneq ($(and $(TEST),$(PROJECT)),)
-    $(error PROJECT and TEST cant be defined at the same time)
+    $(error PROJECT and TEST can't be defined at the same time)
 endif
 ifeq ($(or $(TEST),$(PROJECT)),)
     $(error PROJECT or TEST must be defined)
@@ -19,7 +19,7 @@ endif
 ####################################################################
 
 .SUFFIXES:
-.PHONY: all test clean upload
+.PHONY: all test clean upload savetarget
 
 ifeq ($(TEST),)
 PROJECT_NAME=$(PROJECT)
@@ -33,7 +33,7 @@ BIN_DIR = $(BUILD_DIR)/bin
 LIB_DIR = $(BUILD_DIR)/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
 
 ifeq ($(TARGET),)
-  -include saved.target
+  -include target/saved.target
   ifeq ($(TARGET),)
     $(info TARGET not defined, using default target "arduino.uno")
     TARGET=arduino.uno
@@ -106,9 +106,6 @@ QKLIB_NAMES = \
 qkprogram
 
 QKLIB_PATHS = $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), $(QKLIB_NAMES))
-
-#LIBS += -L$(QKPROGRAM_LIB_DIR) -lqkprogram
-
 LIBS += $(addprefix -L, $(QKLIB_PATHS)) $(addprefix -l, $(QKLIB_NAMES))
 
 INCLUDE_DIR += \
@@ -121,7 +118,6 @@ endif
 CFLAGS += -O$(OPTIMIZE) -g3 -Wall
 LIBS += -lm
 ARFLAGS = rcs
-
 
 INCLUDEPATHS = $(addprefix -I, $(INCLUDE_DIR))
 C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
@@ -210,9 +206,9 @@ ifneq (clean,$(findstring clean, $(MAKECMDGOALS)))
 endif
 
 savetarget:
-	-@rm -f saved.target
+	-@rm -f target/saved.target
 	@echo "saving target"
-	@echo >saved.target "TARGET = $(TARGET)"
+	@echo >target/saved.target "TARGET = $(TARGET)"
 
 ###############################################################################
 # UPLOAD
