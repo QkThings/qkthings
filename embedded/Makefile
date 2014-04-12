@@ -2,32 +2,83 @@
 # qkthings                                                        
 ####################################################################
 
-TOOLCHAIN_DIR = shared/toolchain
-
-####################################################################
-# CHECK                                                      
-####################################################################
-ifneq ($(and $(TEST),$(PROJECT)),)
-    $(error PROJECT and TEST can't be defined at the same time)
-endif
-ifeq ($(or $(TEST),$(PROJECT)),)
-    $(error PROJECT or TEST must be defined)
-endif
-
-####################################################################
-# DEFINITIONS                                                      
-####################################################################
-
 .SUFFIXES:
-.PHONY: all test clean upload savetarget
+.PHONY: lib app test clean upload savetarget
 
-ifeq ($(TEST),)
-PROJECT_NAME=$(PROJECT)
-BUILD_DIR = $(PROJECT_NAME)/build
-else
-PROJECT_NAME=$(TEST)
-BUILD_DIR = test/build
+####################################################################
+# INIT                                                      
+####################################################################
+
+#PRINT_MESSAGES = 1
+
+ifeq ($(MAKECMDGOALS),)
+$(error Make what?)
 endif
+
+define init_lib
+PROJECT_NAME = $(LIB)
+BUILD_DIR    = $(LIB)/build
+endef
+
+define init_test
+PROJECT_NAME = $(TEST)
+BUILD_DIR    = test/build
+endef
+
+define init_app
+PROJECT_NAME = app
+BUILD_DIR    = $(APP)
+endef
+
+ifeq ($(MAKECMDGOALS), lib)
+ifneq ($(LIB),)
+$(info Builing LIB = $(LIB))
+$(eval $(call init_lib,))
+else
+$(error LIB must be defined)
+endif
+endif
+
+ifeq ($(MAKECMDGOALS), test)
+ifneq ($(TEST),)
+$(info Builing TEST = $(TEST))
+$(eval $(call init_test,))
+else
+$(error TEST must be defined)
+endif
+endif
+
+ifeq ($(MAKECMDGOALS), app)
+ifneq ($(APP),)
+$(info Builing APP = $(APP))
+$(eval $(call init_app,))
+else
+$(error APP must be defined)
+endif
+endif
+
+ifeq ($(MAKECMDGOALS), clean)
+ifeq ($(LIB),)
+ifeq ($(TEST),)
+ifeq ($(APP),)
+$(error You must define LIB, TEST or APP)
+else
+$(info Cleaning APP $(APP))
+$(eval $(call init_app,))
+endif
+else
+$(info Cleaning TEST $(TEST))
+$(eval $(call init_test,))
+endif
+else
+$(info Cleaning LIB $(LIB))
+$(eval $(call init_lib,))
+endif
+endif
+
+$(info PROJECT_NAME = $(PROJECT_NAME))
+$(info BUILD_DIR    = $(BUILD_DIR))
+
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
 LIB_DIR = $(BUILD_DIR)/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
@@ -53,9 +104,6 @@ TARGET_VARIANT=$(call get_target_variant,$(TARGET),$(TARGET_NAME))
 TARGET_BOARD=target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
 TARGET_CPU=target/$(TARGET_NAME)/$(TARGET_NAME).mk
 TARGET_GLOBAL= $(TARGET_BOARD) $(TARGET_CPU)
-
-OPTIMIZE = s
-OFORMAT = binary
 
 # Try autodetecting the environment
 ifeq ($(SHELLNAMES),)
@@ -89,16 +137,24 @@ NULLDEVICE := /dev/null
 SHELLNAMES := $(ComSpec)$(COMSPEC)
 
 ####################################################################
-# DIRS AND FLAGS                     
+# DEFINITIONS                                                      
 ####################################################################
 
-ifeq ($(TEST),)
+TOOLCHAIN_DIR = shared/toolchain
+OPTIMIZE = s
+OFORMAT = binary
+
+####################################################################
+# DIRS AND FLAGS                     
+####################################################################
+#($(and $(APP),$(TEST)),)
+ifeq ($(MAKECMDGOALS),lib)
 #-------------------------------------------------------------------
   include $(PROJECT_NAME)/build/$(PROJECT_NAME).mk
 #-------------------------------------------------------------------
 else
 #-------------------------------------------------------------------
-include $(TARGET_GLOBAL)
+
 CFLAGS += -DBUILD_DEVICE
 #QKPROGRAM_LIB_DIR = qkprogram/build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
 
@@ -111,7 +167,16 @@ LIBS += $(addprefix -L, $(QKLIB_PATHS)) $(addprefix -l, $(QKLIB_NAMES))
 INCLUDE_DIR += \
 qkprogram/include
 
+include $(TARGET_GLOBAL)
+
+ifeq ($(MAKECMDGOALS),app)
+INCLUDE_DIR += \
+$(APP)
+C_SRC_DIR += \
+$(APP)
+else
 C_SRC += test/$(TEST).c
+endif
 #-------------------------------------------------------------------
 endif
 
@@ -119,7 +184,7 @@ CFLAGS += -O$(OPTIMIZE) -g3 -Wall
 LIBS += -lm
 ARFLAGS = rcs
 
-INCLUDEPATHS = $(addprefix -I, $(INCLUDE_DIR))
+INCLUDEPATHS += $(addprefix -I, $(INCLUDE_DIR))
 C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
 
 # Create directories and do a clean which is compatible with parallell make
@@ -156,9 +221,9 @@ vpath %.S $(S_PATHS)
 ###############################################################################
 # BUILD
 ###############################################################################
-all: 	lib
-app:    $(BIN_DIR)/$(PROJECT_NAME).bin
+#all: 	lib
 lib:	$(LIB_DIR)/lib$(PROJECT_NAME).a
+app:    $(BIN_DIR)/$(PROJECT_NAME).bin
 test:	app
 
 # Create objects from C SRC files

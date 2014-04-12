@@ -10,11 +10,16 @@
 ###############################################################################
 # MESSAGES
 ###############################################################################
+ifneq ($(PRINT_MESSAGES),)
 ifeq ($(HAS_BOOT),1)
     ${info Bootloader enabled}
 else
     ${info Bootloader disabled}
 endif
+endif
+###############################################################################
+# DEFINITIONS
+###############################################################################
 
 ###############################################################################
 # PATHS
@@ -86,7 +91,7 @@ DEPFLAGS = -MMD -MP -MF $(@:.o=.d)
 # Add -Wa,-ahld=$(LST_DIR)/$(@F:.o=.lst) to CFLAGS to produce assembly list files
 # -DDEBUG_EFM -DNDEBUG
 
-CFLAGS += -Wall -Wextra -mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd \
+CFLAGS += -mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd \
 -ffunction-sections -fdata-sections -fomit-frame-pointer \
 $(DEPFLAGS) -D$(DEVICE) -D$(BOARD)
 
@@ -101,9 +106,11 @@ else
 endif
 
 #LDFLAGS += -Xlinker -Map=$(OBJ_DIR)/$(PROJECTNAME).map -mcpu=cortex-m3
+#-specs=nano.specs -u _printf_float -u _scanf_float \
 LDFLAGS += -mcpu=cortex-m3 -mthumb \
 -T$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/GCC/$(LD_FILE) \
 -Wl,--gc-sections
 
-LIBS = -lm -Wl,--start-group -lgcc -lc -lnosys   -Wl,--end-group 
+#LIBS += -Wl,--start-group -lstdc++ -lsupc++ -lc -lgcc -lnosys   -Wl,--end-group
+LIBS += -Wl,--start-group -lstdc++ -lc -lgcc -lnosys  -Wl,--end-group
 
