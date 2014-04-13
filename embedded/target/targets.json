@@ -1,0 +1,24 @@
+{
+    "EFM32": {
+        "toolchainUrl": "url-link",
+        "variants": [
+            {
+                "name": "G_OLIMEX"
+            },
+            {
+                "name": "G_STK"
+            }
+        ]
+    },
+    "Arduino": {
+        "toolchainUrl": "url-link",
+        "variants": [
+            {
+                "name": "Uno"
+            },
+            {
+                "name": "Nano"
+            }
+        ]
+    }
+}

@@ -26,7 +26,7 @@ BUILD_DIR    = test/build
 endef
 
 define init_app
-PROJECT_NAME = app
+PROJECT_NAME ?= app
 BUILD_DIR    = $(APP)
 endef
 
@@ -252,7 +252,6 @@ $(BIN_DIR)/$(PROJECT_NAME).out: $(OBJS)
 $(LIB_DIR)/lib$(PROJECT_NAME).a: $(OBJS)
 	@echo Creating static library: $@
 	$(AR) $(ARFLAGS) $(LIB_DIR)/lib$(PROJECT_NAME).a $(OBJS)
-	$(RMDIRS) $(OBJ_DIR) 
 
 # Create binary file
 $(BIN_DIR)/$(PROJECT_NAME).bin: $(BIN_DIR)/$(PROJECT_NAME).out
@@ -280,8 +279,14 @@ savetarget:
 ###############################################################################
 # UPLOAD
 ###############################################################################
-PORT ?= comm_port
-FILE ?= file_to_upload
+ifeq ($(MAKECMDGOALS),upload)
+  ifeq ($(PORT),)
+    $(error PORT must be defined)
+  endif
+  ifeq ($(FILE),)
+    $(error FILE must be defined)
+  endif
+endif
 upload:
 	$(UPLOAD_CMD)
 

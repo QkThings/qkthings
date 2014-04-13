@@ -70,8 +70,8 @@ else
 endif
 
 #LDFLAGS += -Xlinker -Map=$(OBJ_DIR)/$(PROJECTNAME).map -mcpu=cortex-m3
-#-specs=nano.specs -u _printf_float -u _scanf_float \
-LDFLAGS += -mcpu=cortex-m3 -mthumb \
+#-specs=nano.specs -u _printf_float -u _scanf_float
+LDFLAGS = -mcpu=cortex-m3 -mthumb \
 -T$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/GCC/$(LD_FILE) \
 -Wl,--gc-sections
 

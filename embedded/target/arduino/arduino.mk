@@ -17,8 +17,7 @@ DUMP    = $(TOOLCHAIN_DIR)/win/avr/bin/avr-objdump
 PSIZE	= $(TOOLCHAIN_DIR)/win/avr/bin/avr-size
 endif
 
-#OPTIMIZE = s
-FORMAT = ihex
+OFORMAT = ihex
 
 ###############################################################################
 # CPU
@@ -30,10 +29,10 @@ FORMAT = ihex
 # SOURCE
 ###############################################################################
 INCLUDE_DIR += \
-$(QKPROGRAM_ROOT_DIR)/lib/hal/arduino
+$(QKPROGRAM_DIR)/lib/hal/arduino
 
 C_SRC_DIR += \
-$(QKPROGRAM_ROOT_DIR)/lib/hal/arduino
+$(QKPROGRAM_DIR)/lib/hal/arduino
 ###############################################################################
 # FLAGS
 ###############################################################################
