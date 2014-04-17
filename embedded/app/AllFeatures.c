@@ -34,17 +34,18 @@ void sample_callback()
 	{
   		evt_args[0] = 123.123+(float)counter;
   		evt_args[1] = 456.456+(float)counter;
-		//qk_event_set_args(0, evt_args, 2);
-		//qk_event_generate(0, "event fired with some arguments");	
-		
-  		qk_event_generate(0, evt_args, 2, "event fired with some arguments");	
+		qk_event_set_args(0, evt_args, 2);
+		qk_event_generate(0, "event fired with some arguments");	
+  		//qk_event_generate(0, evt_args, 2, "event fired with some arguments");	
 	}
 	if((counter % 25) == 0)
 	{
 		evt_args[0] = 1.123+(float)counter;
 		evt_args[1] = 2.456+(float)counter;
 		evt_args[2] = 3.456+(float)counter;
-		qk_event_generate(0, evt_args, 3, "arguments: %0, %1 and %2.");
+		qk_event_set_args(0, evt_args, 3);
+		qk_event_generate(0, "arguments: %0, %1 and %2.");	
+//		qk_event_generate(0, evt_args, 3, );
 	}
 }
 
@@ -79,21 +80,17 @@ void qk_setup()
 	qk_config_set_type(3, QK_CONFIG_TYPE_FLOAT);
 	qk_config_set_value_f(3, 10.123);
 
-	qk_datetime dateTime;
-	dateTime.year = 13;
-	dateTime.month = 8;
-	dateTime.day = 17;
-	dateTime.hours = 22;
-	dateTime.minutes = 38;
-	dateTime.seconds = 1;
+	qk_datetime dt;
+	qk_datetime_set_date(&dt, 13, 8, 17);
+	qk_datetime_set_time(&dt, 22, 38, 1);
 
 	qk_config_set_label(4, "DATETIME");
 	qk_config_set_type(4, QK_CONFIG_TYPE_DATETIME);
-	qk_config_set_value_dt(4, dateTime);
+	qk_config_set_value_dt(4, dt);
 
 	qk_config_set_label(5, "TIME");
 	qk_config_set_type(5, QK_CONFIG_TYPE_TIME);
-	qk_config_set_value_dt(5, dateTime);
+	qk_config_set_value_dt(5, dt);
 
 	qk_data_set_buffer(dat_buf, DAT_COUNT);
 	qk_data_set_type(QK_DATA_TYPE_FLOAT);
@@ -113,12 +110,12 @@ void qk_setup()
 	qk_action_set_label(1, "ACT_INT");
 	qk_action_set_type(1, QK_ACTION_TYPE_INT);
 
-	qk_set_sample_callback(sample_callback);
-	qk_set_action_callback(action_callback);
+	qk_action_set_callback(action_callback);
+
+	qk_sampling_set_callback(QK_SAMPLING_CALLBACK_SAMPLE, sample_callback);	
+	qk_sampling_set_frequency(10);
 	
-	qk_set_sampling_frequency(10);
-	
-	qk_set_clock_mode(QK_CLOCK_MODE_FAST);
+	qk_clock_set_mode(QK_CLOCK_MODE_FAST);
 }
 
 int main(void)
