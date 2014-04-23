@@ -155,16 +155,17 @@ ifeq ($(MAKECMDGOALS),lib)
 else
 #-------------------------------------------------------------------
 CFLAGS += -DBUILD_DEVICE
-#QKPROGRAM_LIB_DIR = qkprogram/build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)
 
 QKLIB_NAMES = \
-qkprogram
+qkprogram \
+qkperipheral \
+qkdsp
 
 QKLIB_PATHS = $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), $(QKLIB_NAMES))
-LIBS += $(addprefix -L, $(QKLIB_PATHS)) $(addprefix -l, $(QKLIB_NAMES))
+QKLIB_INCLUDES = $(addsuffix /include, $(QKLIB_NAMES))
 
-INCLUDE_DIR += \
-qkprogram/include
+LIBS += $(addprefix -L, $(QKLIB_PATHS)) $(addprefix -l, $(QKLIB_NAMES))
+INCLUDE_DIR += $(QKLIB_INCLUDES)
 
 include $(TARGET_GLOBAL)
 
@@ -182,6 +183,7 @@ endif
 endif
 
 CFLAGS += -O$(OPTIMIZE) -g3 -Wall
+CFLAGS += -DINIT_CLKFREQ=$(INIT_CLKFREQ)
 LIBS += -lm
 ARFLAGS = rcs
 

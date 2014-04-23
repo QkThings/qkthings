@@ -21,8 +21,10 @@ endif
 # DEFINITIONS
 ###############################################################################
 
+INIT_CLKFREQ = 14000000
+
 ###############################################################################
-# PATHS
+# DIRS and FILES
 ###############################################################################
 
 ENERGYMICRO = $(TOOLCHAIN_DIR)/common/energymicro
@@ -43,6 +45,11 @@ $(ENERGYMICRO)/CMSIS/Include \
 $(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Include \
 $(ENERGYMICRO)/emlib/inc
 
+C_SRC += \
+$(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/system_efm32g.c
+
+S_SRC += $(ENERGYMICRO)/Device/EnergyMicro/EFM32G/Source/GCC/startup_efm32g.S
+
 ###############################################################################
 # FLAGS
 ###############################################################################
@@ -57,7 +64,8 @@ $(ENERGYMICRO)/emlib/inc
 
 CFLAGS += -mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd \
 -ffunction-sections -fdata-sections -fomit-frame-pointer \
-$(DEPFLAGS) -D$(DEVICE) -D$(BOARD)
+$(DEPFLAGS) \
+-D$(DEVICE) -D$(BOARD) 
 
 ASMFLAGS += -x assembler-with-cpp -mcpu=cortex-m3 -mthumb
 
