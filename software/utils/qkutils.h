@@ -8,11 +8,10 @@
 
 namespace QkUtils
 {
-
 class Target
 {
 public:
-    class Variant
+    class Board
     {
     public:
         QString name;
@@ -20,13 +19,13 @@ public:
 
     QString name;
     QString toolchainUrl;
-    QList<Variant> variants;
+    QList<Board> boards;
 };
 
 typedef QList<QkUtils::Target> TargetList;
-typedef QList<QkUtils::Target::Variant> TargetVariantList;
+typedef QList<QkUtils::Target::Board> TargetVariantList;
 
-void setInfoPath(const QString &path);
+void setEmbeddedPath(const QString &path);
 QMap<QString, Target> supportedTargets();
 
 extern QString _infoPath;

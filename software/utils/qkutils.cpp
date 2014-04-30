@@ -6,24 +6,26 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+
 namespace QkUtils
 {
-    QString _infoPath = QString();
+QString _embeddedPath = QString("embeddedPath");
 }
 
 using namespace QkUtils;
 
-void QkUtils::setInfoPath(const QString &path)
+void QkUtils::setEmbeddedPath(const QString &path)
 {
-    _infoPath = path;
+    _embeddedPath = path;
 }
 
 QMap<QString, Target> QkUtils::supportedTargets()
 {
     QMap<QString, Target>  targets;
 
-    QString filePath = _infoPath + "/targets.json";
+    QString filePath = _embeddedPath + "/target/targets.json";
     QJsonDocument doc = jsonFromFile(filePath);
+
 
     QVariantMap jsonTargets = doc.object().toVariantMap();
 
@@ -44,13 +46,13 @@ QMap<QString, Target> QkUtils::supportedTargets()
         foreach(QVariant jsonVariant, jsonTargetVariants)
         {
             QMap<QString, QVariant> variant = jsonVariant.toMap();
-            Target::Variant targetVariant;
+            Target::Board targetVariant;
 
             targetVariant.name = variant["name"].toString();
 
             targetVariants.append(targetVariant);
         }
-        target.variants.append(targetVariants);
+        target.boards.append(targetVariants);
         targets.insert(targetName, target);
     }
 
