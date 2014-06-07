@@ -6,26 +6,14 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-
-namespace QkUtils
-{
-QString _embeddedPath = QString("embeddedPath");
-}
-
 using namespace QkUtils;
 
-void QkUtils::setEmbeddedPath(const QString &path)
-{
-    _embeddedPath = path;
-}
-
-QMap<QString, Target> QkUtils::supportedTargets()
+QMap<QString, Target> QkUtils::supportedTargets(const QString &embPath)
 {
     QMap<QString, Target>  targets;
 
-    QString filePath = _embeddedPath + "/target/targets.json";
+    QString filePath = embPath + "/target/targets.json";
     QJsonDocument doc = jsonFromFile(filePath);
-
 
     QVariantMap jsonTargets = doc.object().toVariantMap();
 
@@ -40,8 +28,6 @@ QMap<QString, Target> QkUtils::supportedTargets()
 
         QVariantList jsonTargetVariants = jsonTargetInfo["variants"].toList();
         TargetVariantList targetVariants;
-
-        qDebug() << jsonTargetInfo;
 
         foreach(QVariant jsonVariant, jsonTargetVariants)
         {
@@ -85,4 +71,125 @@ QJsonDocument QkUtils::jsonFromFile(const QString &filePath)
     return doc;
 }
 
+void QkUtils::fillValue(int value, int count, int *idx, QByteArray &data)
+{
+    int i, j = *idx;
+    for(i = 0; i < count; i++, j++)
+    {
+        data.insert(j, (value >> 8*i) & 0xFF);
+    }
+    *idx = j;
+}
+
+void QkUtils::fillString(const QString &str, int count, int *idx, QByteArray &data)
+{
+    QString justifiedStr = str.leftJustified(count, '\0', true);
+    fillString(justifiedStr, idx, data);
+}
+
+void QkUtils::fillString(const QString &str, int *idx, QByteArray &data)
+{
+    int j = *idx;
+    data.insert(j, str);
+    j += str.length()+1;
+}
+
+int QkUtils::getValue(int count, int *idx, const QByteArray &data, bool sigExt)
+{
+    int j, value = 0;
+    int i = *idx;
+
+    for(j = 0; j < count; j++, i++)
+    {
+        if(i < data.count())
+            value += (data.at(i) & 0xFF) << (8*j); // little endian
+    }
+
+    switch(count) // truncate and extend sign bit
+    {
+    case 1:
+        value &= 0xFF;
+        if(sigExt & ((value & 0x80) > 0))
+            value |= 0xFFFFFF00;
+        break;
+    case 2:
+        value &= 0xFFFF;
+        if(sigExt & ((value & 0x8000) > 0))
+            value |= 0xFFFF0000;
+        break;
+    case 4:
+        value &= 0xFFFFFFFF;
+        break;
+    }
+
+    *idx = i;
+    return value;
+}
+
+QString QkUtils::getString(int *idx, const QByteArray &data)
+{
+    int j;
+    char c, buf[1024];
+    int i = *idx;
+
+    memset(buf, '\0', sizeof(buf));
+
+    for(j=0; j < 1024; j++)
+    {
+        if(j+1 < data.length())
+        {
+            c = (char)((quint8)data[i++]);
+            if(c == '\0')
+                break;
+            if((c < 32 || c > 126))
+                c = ' ';
+            buf[j] = c;
+        }
+        else
+            break;
+    }
+
+    *idx = i;
+    return QString(buf);
+}
+
+QString QkUtils::getString(int count, int *idx, const QByteArray &data)
+{
+    int j;
+    char c, buf[count+1];
+    int i = *idx;
+
+    memset(buf, '\0', sizeof(buf));
+
+    for(j=0; j < count; j++)
+    {
+        if(j+1 < data.length())
+        {
+            c = (char)((quint8)data[i++]);
+            if((c < 32 || c > 126) && c != '\0')
+                c = ' ';
+            buf[j] = c;
+        }
+        else
+            break;
+    }
+    buf[count] = '\0';
+    *idx = i;
+    return QString(buf);
+}
+
+float QkUtils::floatFromBytes(int value)
+{
+    IntFloatConverter converter;
+    converter.i_value = value;
+    return converter.f_value;
+}
+
+int QkUtils::bytesFromFloat(float value)
+{
+    IntFloatConverter converter;
+    converter.f_value = value;
+
+    return converter.i_value;
+}
 
