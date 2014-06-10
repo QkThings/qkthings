@@ -163,7 +163,7 @@ qkperipheral
 QKLIB_PATHS = $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), $(QKLIB_NAMES))
 QKLIB_INCLUDES = $(addsuffix /include, $(QKLIB_NAMES))
 
-LIBS += $(addprefix -L, $(QKLIB_PATHS)) $(addprefix -l, $(QKLIB_NAMES))
+LIBS += $(addprefix -L, $(QKLIB_PATHS)) #$(addprefix -l, $(QKLIB_NAMES))
 INCLUDE_DIR += $(QKLIB_INCLUDES)
 
 include $(TARGET_GLOBAL)
@@ -183,6 +183,7 @@ endif
 
 CFLAGS += -O$(OPTIMIZE) -g3 -Wall
 CFLAGS += -DINIT_CLKFREQ=$(INIT_CLKFREQ)
+CFLAGS += $(addprefix -D, $(DEFINES))
 LIBS += -lm
 ARFLAGS = rcs
 

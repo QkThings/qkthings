@@ -1,0 +1,1 @@
+. undef_all ; export TARGET=arduino.uno; export LIB=qkprogram; make clean; make lib BUILD_TARGET=BUILD_DEVICE
