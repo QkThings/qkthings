@@ -15,7 +15,7 @@ uint16_t	 counter = 10;
 void sample_callback()
 {
 	// Send a debug string	
-	QK_LOG_DEBUG("test_sample() [called %d times]", counter++);
+	//QK_LOG_DEBUG("test_sample() [called %d times]", counter++);
 	
 	// Generate some data
 	time += 0.01;
@@ -35,7 +35,7 @@ void sample_callback()
   		evt_args[0] = 123.123+(float)counter;
   		evt_args[1] = 456.456+(float)counter;
 		qk_event_set_args(0, evt_args, 2);
-		qk_event_generate(0, "event fired with some arguments");	
+		//qk_event_generate(0, "event fired with some arguments");	
   		//qk_event_generate(0, evt_args, 2, "event fired with some arguments");	
 	}
 	if((counter % 25) == 0)
@@ -44,7 +44,7 @@ void sample_callback()
 		evt_args[1] = 2.456+(float)counter;
 		evt_args[2] = 3.456+(float)counter;
 		qk_event_set_args(0, evt_args, 3);
-		qk_event_generate(0, "arguments: %0, %1 and %2.");	
+		//qk_event_generate(0, "arguments: %0, %1 and %2.");	
 //		qk_event_generate(0, evt_args, 3, );
 	}
 }

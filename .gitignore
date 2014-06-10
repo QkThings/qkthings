@@ -6,6 +6,7 @@ output/
 *shared*
 *.so*
 *.*~
+*~
 *.a
 *.o
 *.d

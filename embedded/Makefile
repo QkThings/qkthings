@@ -154,14 +154,18 @@ ifeq ($(MAKECMDGOALS),lib)
 #-------------------------------------------------------------------
 else
 #-------------------------------------------------------------------
-CFLAGS += -DBUILD_DEVICE
 
-QKLIB_NAMES = \
-qkprogram \
-qkperipheral
+ifeq ($(BUILD_TARGET), BUILD_DEVICE)
+LIB_DIR := $(LIB_DIR)/device
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/device, qkprogram)
+endif
+ifeq ($(BUILD_TARGET), BUILD_COMM)
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/comm, qkprogram)
+endif
+QKLIB_INCLUDES += $(addsuffix /include, qkprogram)
 
-QKLIB_PATHS = $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), $(QKLIB_NAMES))
-QKLIB_INCLUDES = $(addsuffix /include, $(QKLIB_NAMES))
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
+QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
 
 LIBS += $(addprefix -L, $(QKLIB_PATHS)) #$(addprefix -l, $(QKLIB_NAMES))
 INCLUDE_DIR += $(QKLIB_INCLUDES)
@@ -169,6 +173,8 @@ INCLUDE_DIR += $(QKLIB_INCLUDES)
 include $(TARGET_GLOBAL)
 
 ifeq ($(MAKECMDGOALS),app)
+include $(APP)/app.mk
+$(info BUILD_TARGET=$(BUILD_TARGET))
 INCLUDE_DIR += \
 $(APP)
 C_SRC_DIR += \
