@@ -155,8 +155,12 @@ ifeq ($(MAKECMDGOALS),lib)
 else
 #-------------------------------------------------------------------
 
+ifeq ($(BUILD_TARGET),)
+$(error BUILD_TARGET not defined)
+endif
+
 ifeq ($(BUILD_TARGET), BUILD_DEVICE)
-LIB_DIR := $(LIB_DIR)/device
+#LIB_DIR := $(LIB_DIR)/device
 QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/device, qkprogram)
 endif
 ifeq ($(BUILD_TARGET), BUILD_COMM)

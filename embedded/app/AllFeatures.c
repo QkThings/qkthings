@@ -115,7 +115,7 @@ void qk_setup()
 	qk_sampling_set_callback(QK_SAMPLING_CALLBACK_SAMPLE, sample_callback);	
 	qk_sampling_set_frequency(10);
 	
-	qk_clock_set_mode(QK_CLOCK_MODE_FAST);
+//	qk_clock_set_mode(QK_CLOCK_MODE_FAST);
 }
 
 int main(void)

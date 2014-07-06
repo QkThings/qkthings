@@ -1,9 +1,9 @@
 ###############################################################################
 # qkthings.com
 ###############################################################################
-BOARD  = EFM32G_OLIMEX
-DEVICE = EFM32G210F128
-FAMILY = EFM32G
+BOARD  = EFM32TG_DEVBOARD
+DEVICE = EFM32TG210F32
+FAMILY = EFM32TG
 HAS_BOOT = 1
 
 
