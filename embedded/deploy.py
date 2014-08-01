@@ -16,6 +16,8 @@ def deploy():
 	targets = []
 	targets.append("arduino.uno")
 	targets.append("efm32.g_olimex")
+	targets.append("efm32.dev_tg")
+	targets.append("efm32.dev_tg_revb")
 
 	libs = []
 	libs.append("qkprogram")

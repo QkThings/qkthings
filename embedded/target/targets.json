@@ -7,6 +7,12 @@
             },
             {
                 "name": "G_STK"
+            },
+            {
+                "name": "DEV_TG"
+            },
+            {
+                "name": "DEV_TG_REVB"
             }
         ]
     },

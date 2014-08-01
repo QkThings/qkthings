@@ -145,19 +145,37 @@ OPTIMIZE = s
 OFORMAT = binary
 
 ####################################################################
-# DIRS AND FLAGS                     
+# MAKE LIB
 ####################################################################
-#($(and $(APP),$(TEST)),)
 ifeq ($(MAKECMDGOALS),lib)
-#-------------------------------------------------------------------
   include $(PROJECT_NAME)/build/$(PROJECT_NAME).mk
-#-------------------------------------------------------------------
 else
-#-------------------------------------------------------------------
+####################################################################
+# MAKE APP
+####################################################################
+ifeq ($(MAKECMDGOALS),app)
+include $(APP)/app.mk
+INCLUDE_DIR += \
+$(APP)
+C_SRC_DIR += \
+$(APP)
 
+$(info BUILD_TARGET=$(BUILD_TARGET))
 ifeq ($(BUILD_TARGET),)
-$(error BUILD_TARGET not defined)
+  $(error BUILD_TARGET not defined (BUILD_COMM or BUILD_DEVICE?))
 endif
+DEFINES += $(BUILD_TARGET)
+
+$(info QK_LIBS=$(QK_LIBS))
+$(info FILTER=$(filter $(QK_LIBS), qkperipheral))
+$(info FILTER=$(findstring qkperipheral, $(QK_LIBS)))
+
+ifneq ( $(findstring qkperipheral, $(QK_LIBS)), )
+#  $(error ASDASDASD)
+  QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
+  QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
+endif
+
 
 ifeq ($(BUILD_TARGET), BUILD_DEVICE)
 #LIB_DIR := $(LIB_DIR)/device
@@ -168,28 +186,28 @@ QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/comm, qkp
 endif
 QKLIB_INCLUDES += $(addsuffix /include, qkprogram)
 
-QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
-QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
-
 LIBS += $(addprefix -L, $(QKLIB_PATHS)) #$(addprefix -l, $(QKLIB_NAMES))
+LIBS += $(addprefix -l, $(QK_LIBS))
+
 INCLUDE_DIR += $(QKLIB_INCLUDES)
 
 include $(TARGET_GLOBAL)
+include qkperipheral/build/target/$(TARGET_NAME)/$(TARGET_NAME)_hw.mk
 
-ifeq ($(MAKECMDGOALS),app)
-include $(APP)/app.mk
-$(info BUILD_TARGET=$(BUILD_TARGET))
-INCLUDE_DIR += \
-$(APP)
-C_SRC_DIR += \
-$(APP)
+else
+####################################################################
+# MAKE UPLOAD
+####################################################################
+ifeq ($(MAKECMDGOALS),upload)
+include $(TARGET_GLOBAL)
 endif
 
-ifeq ($(MAKECMDGOALS),test)
-C_SRC += test/$(TEST).c
 endif
-#-------------------------------------------------------------------
 endif
+
+####################################################################
+# FLAGS
+####################################################################
 
 CFLAGS += -O$(OPTIMIZE) -g3 -Wall
 CFLAGS += -DINIT_CLKFREQ=$(INIT_CLKFREQ)
@@ -197,8 +215,9 @@ CFLAGS += $(addprefix -D, $(DEFINES))
 LIBS += -lm
 ARFLAGS = rcs
 
-INCLUDEPATHS += $(addprefix -I, $(INCLUDE_DIR))
-C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
+####################################################################
+# CREATE/REMOVE DIRECTORIES
+####################################################################
 
 # Create directories and do a clean which is compatible with parallell make
 $(shell mkdir -p $(OBJ_DIR)>$(NULLDEVICE) 2>&1)
@@ -219,6 +238,10 @@ endif
 ###############################################################################
 # FILES
 ###############################################################################
+
+INCLUDEPATHS += $(addprefix -I, $(INCLUDE_DIR))
+C_SRC += $(wildcard $(addsuffix /*.c, $(C_SRC_DIR)))
+
 C_FILES = $(notdir $(C_SRC) )
 S_FILES = $(notdir $(S_SRC) $(s_SRC) )
 C_PATHS = $(sort $(dir $(C_SRC) ) )

@@ -103,3 +103,10 @@ LDFLAGS = -mcpu=cortex-m3 -mthumb \
 #LIBS += -Wl,--start-group -lstdc++ -lsupc++ -lc -lgcc -lnosys   -Wl,--end-group
 LIBS += -Wl,--start-group -lstdc++ -lc -lgcc -lnosys  -Wl,--end-group
 
+
+###############################################################################
+# UPLOAD
+###############################################################################
+EFM32_LOADER=/home/mribeiro/bitbucket/qkthings/software/qkloader/efm32_loader/release/efm32_loader
+UPLOAD_CMD = $(EFM32_LOADER) $(PORT) $(FILE)
+
