@@ -1,6 +1,7 @@
 embedded/shared/
 software/shared/
 software/tools/
+software/installer/
 output/
 deploy/
 */shared/
