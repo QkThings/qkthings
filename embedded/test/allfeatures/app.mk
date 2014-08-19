@@ -1,4 +1,4 @@
 BUILD_TARGET = BUILD_DEVICE
-LIBS += -lqkprogram
+QK_LIBS += qkprogram
 
 DEFINES += $(BUILD_TARGET)

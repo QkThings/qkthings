@@ -21,6 +21,9 @@ QMap<QString, Target> QkUtils::supportedTargets(const QString &embPath)
     {
         Target target;
 
+        if(targetName == "version")
+            continue;
+
         target.name = targetName;
         QVariantMap jsonTargetInfo = jsonTargets[targetName].toMap();
 

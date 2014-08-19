@@ -1,26 +1,12 @@
 #!/usr/bin/python
 
+from os import getcwd, chdir, path
 import os, platform, shutil, datetime, tarfile, distutils.core
 import subprocess
+from subprocess import call
 import os, tarfile, datetime
 
-DEPLOY_DIR="~"
-QT_VER_STR="5.1"
-
-def make_tarfile(source_dir, output_filename):
-    with tarfile.open(output_filename, "w:gz") as tar:
-        tar.add(source_dir, arcname=os.path.basename(source_dir))
-		
-def main():
-	output_dir = os.path.basename("qkthings_backup")
-	date_and_ext = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + ".tar.gz"
-	folders = ["qkthings", "qkthings_linux"]
-
-	print "Creating qkthings backup on folder: " + output_dir
-	for folder in folders:
-		print folder, "..."
-		make_tarfile(folder, os.path.join(output_dir, folder + "_" + date_and_ext))
-	print "Done"
+DEPLOY_DIR="./deploy"
 	
 def main():
 	os_name = platform.system();
@@ -43,13 +29,38 @@ def main():
 	if os.path.exists(qkthings_dir):
 		print "Cleaning..."
 		distutils.dir_util.remove_tree(qkthings_dir)
-		
-	print "Deploying qkide..."
-#	distutils.dir_util.copy_tree("software/shared/qt/" + QT_VER_STR + "/" + os_str, qkide_dir)
-	distutils.dir_util.copy_tree("software/qkcore/release", qkthings_dir + "/qkide")
-	distutils.dir_util.copy_tree("software/qkconnect/release", qkthings_dir + "/qkide")
-	distutils.dir_util.copy_tree("software/qkwidget/release", qkthings_dir + "/qkide")
+
+
+	rootdir = getcwd()
+	EMBEDDED_DIR  = path.join(rootdir, "embedded")
+	SOFTWARE_DIR = path.join(rootdir, "software")
+	QKIDE_DIR = path.join(SOFTWARE_DIR, "qkide");
+
+	print "Deploying qkide"
+	chdir(QKIDE_DIR)
+	call(["python", "deploy.py"])
+	chdir(rootdir)
 	distutils.dir_util.copy_tree("software/qkide/release", qkthings_dir + "/qkide")
+	distutils.dir_util.copy_tree("software/qkdaemon/release", qkthings_dir + "/qkdaemon")
+	distutils.dir_util.copy_tree("software/qkapi/python", qkthings_dir + "/qkapi/python")
+
+	distutils.dir_util.copy_tree("deploy/linux/qt/platforms", qkthings_dir + "/qkide/platforms")
+	distutils.dir_util.copy_tree("deploy/linux/qt/platforms", qkthings_dir + "/qkdaemon/platforms")
+	
+
+	print "Deploying libraries..."
+	distutils.dir_util.copy_tree("software/qkcore/release", qkthings_dir + "/shared/lib")
+	distutils.dir_util.copy_tree("software/qkwidget/release", qkthings_dir + "/shared/lib")
+	distutils.dir_util.copy_tree("software/qkapi/qt/release", qkthings_dir + "/shared/lib")
+
+	distutils.dir_util.copy_tree("deploy/linux/qt/lib", qkthings_dir + "/shared/lib")
+
+
+	return
+#	distutils.dir_util.copy_tree("software/shared/qt/" + QT_VER_STR + "/" + os_str, qkide_dir)
+	distutils.dir_util.copy_tree("software/qkcore/release", qkthings_dir + "/shared")
+#	distutils.dir_util.copy_tree("software/qkapi/release", qkthings_dir + "/shared")
+	distutils.dir_util.copy_tree("software/qkwidget/release", qkthings_dir + "/shared")
 	
 	print "Deploying toolchain..."
 	distutils.dir_util.copy_tree("embedded/shared/toolchain/common", qkide_dir + "/resources/embedded/toolchain/common")

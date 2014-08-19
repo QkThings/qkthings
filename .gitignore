@@ -2,6 +2,7 @@ embedded/shared/
 software/shared/
 software/tools/
 output/
+deploy/
 */shared/
 *shared*
 *.so*

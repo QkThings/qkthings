@@ -174,6 +174,7 @@ ifneq ( $(findstring qkperipheral, $(QK_LIBS)), )
 #  $(error ASDASDASD)
   QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
   QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
+  QKLIB_INCLUDES += $(addsuffix /include/board/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
 endif
 
 

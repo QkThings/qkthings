@@ -1,10 +1,8 @@
 ############################################################################################
-# Makefile for the project Star_High_Rate Release Using single source files
+# QkThings
 ############################################################################################
 
 BUILD_TARGET = BUILD_COMM
-#DEFINES += BUILD_COMM
-
 QK_LIBS += qkprogram qkperipheral
 
 INCLUDE_DIR += 

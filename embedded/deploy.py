@@ -19,13 +19,22 @@ def deploy():
 	targets.append("efm32.dev_tg")
 	targets.append("efm32.dev_tg_revb")
 
+
 	libs = []
 	libs.append("qkprogram")
+	libs.append("qkperipheral")
+	libs.append("qkdsp")
 
 	for target in targets:
 		for lib in libs:
 			chdir(path.join(rootdir,lib))
 			call(["python", "deploy.py"])		
+
+	libs = []
+	libs.append("qkprogram")
+
+	for target in targets:
+		for lib in libs:	
 			chdir(rootdir)
 			unset_all()
 			print " === Build LIB=%s for TARGET=%s" % (lib, target)
