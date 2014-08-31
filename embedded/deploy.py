@@ -15,6 +15,7 @@ def deploy():
 
 	targets = []
 	targets.append("arduino.uno")
+	targets.append("arduino.nano")
 	targets.append("efm32.g_olimex")
 	targets.append("efm32.dev_tg")
 	targets.append("efm32.dev_tg_revb")
