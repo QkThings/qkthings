@@ -1,6 +1,9 @@
 Welcome to QkThings!
 =====================
 
-The framework and modular platform for smart devices.
+The open source framework and modular platform for smart devices.
 
-For any questions you may use the following email: `hello@qkthings.com`
+**IMPORTANT:** read the [Building Instructions](http://discourse.qkthings.com/t/building-instructions/20) before cloning this repository.
+
+Questions? Bugs? Visit [community.qkthings.com](http://community.qkthings.com) or send an email to `dev@qkthings.com`
+
