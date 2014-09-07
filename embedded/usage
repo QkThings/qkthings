@@ -7,3 +7,5 @@
 . undef_all ; export TARGET=efm32.dev_tg_revb; export APP=board/comm_bluetooth_2_0/app/slave; make clean; make app
 . undef_all ; export TARGET=efm32.dev_tg_revb; make upload PORT=/dev/ttyUSB0 FILE=board/comm_bluetooth_2_0/app/slave/bin/app.bin
 
+. undef_all ; export TARGET=chibios.stm32p107; export LIB=qkprogram; make clean; make lib
+
