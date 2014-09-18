@@ -39,8 +39,6 @@ endif
 # DEFINITIONS
 ###############################################################################
 
-INIT_CLKFREQ = 14000000
-
 ###############################################################################
 # DIRS and FILES
 ###############################################################################
@@ -104,6 +102,7 @@ endif
 
 CFLAGS += -mcpu=cortex-m3 -mthumb -mfix-cortex-m3-ldrd \
 -ffunction-sections -fdata-sections -fomit-frame-pointer \
+-funsigned-char -funsigned-bitfields -fshort-enums \
 $(DEPFLAGS) \
 -D$(DEVICE) -D$(BOARD) 
 
@@ -116,15 +115,15 @@ ASMFLAGS += -x assembler-with-cpp -mcpu=cortex-m3 -mthumb
 #-specs=nano.specs -u _printf_float -u _scanf_float
 LDFLAGS = -mcpu=cortex-m3 -mthumb \
 -T$(LINKER_SCRIPT) \
--Wl,--gc-sections
+-Wl,--gc-sections $(CFLAGS)
 
 #LIBS += -Wl,--start-group -lstdc++ -lsupc++ -lc -lgcc -lnosys   -Wl,--end-group
-LIBS += -Wl,--start-group -lstdc++ -lc -lgcc -lnosys  -Wl,--end-group
+LIBS += -Wl,--start-group -lc -lgcc -lnosys  -Wl,--end-group
 
 
 ###############################################################################
 # UPLOAD
 ###############################################################################
-EFM32_LOADER=/home/mribeiro/bitbucket/qkthings/software/qkloader/efm32_loader/release/efm32_loader
+EFM32_LOADER=/home/mribeiro/github/qkthings/software/qkloader/efm32_loader/release/efm32_loader
 UPLOAD_CMD = $(EFM32_LOADER) $(PORT) $(FILE)
 

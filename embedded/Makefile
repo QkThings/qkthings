@@ -185,12 +185,10 @@ $(info QK_LIBS=$(QK_LIBS))
 $(info FILTER=$(filter $(QK_LIBS), qkperipheral))
 $(info FILTER=$(findstring qkperipheral, $(QK_LIBS)))
 
-ifneq ( $(findstring qkperipheral, $(QK_LIBS)), )
-#  $(error ASDASDASD)
-  QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
-  QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
-  QKLIB_INCLUDES += $(addsuffix /include/board/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
-endif
+
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
+QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
+QKLIB_INCLUDES += $(addsuffix /include/board/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
 
 
 ifeq ($(BUILD_TARGET), BUILD_DEVICE)
@@ -202,13 +200,15 @@ QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/comm, qkp
 endif
 QKLIB_INCLUDES += $(addsuffix /include, qkprogram)
 
+QK_LIBS = qkprogram qkperipheral
+
 LIBS += $(addprefix -L, $(QKLIB_PATHS)) #$(addprefix -l, $(QKLIB_NAMES))
 LIBS += $(addprefix -l, $(QK_LIBS))
 
 INCLUDE_DIR += $(QKLIB_INCLUDES)
 
 include $(TARGET_GLOBAL)
-include qkperipheral/build/target/$(TARGET_NAME)/$(TARGET_NAME)_hw.mk
+include qkperipheral/build/target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
 
 else
 ####################################################################
@@ -297,7 +297,7 @@ $(OBJ_DIR)/%.o: %.S
 # Link
 $(BIN_DIR)/$(PROJECT_NAME).out: $(OBJS)
 	@echo Linking target: $@
-	$(CC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(BIN_DIR)/$(PROJECT_NAME).out
+	$(CC) $(LDFLAGS) $(INCLUDEPATHS) $(OBJS) $(LIBS) -o $(BIN_DIR)/$(PROJECT_NAME).out
 	
 # Create static library
 $(LIB_DIR)/lib$(PROJECT_NAME).a: $(OBJS)
