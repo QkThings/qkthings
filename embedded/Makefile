@@ -20,6 +20,9 @@
 .SUFFIXES:
 .PHONY: lib app test clean upload savetarget
 
+EMB_DIR = .
+TOOLCHAIN_DIR = shared/toolchain
+
 ####################################################################
 # INIT                                                      
 ####################################################################
@@ -120,11 +123,12 @@ TARGET_BOARD=target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
 TARGET_CPU=target/$(TARGET_NAME)/$(TARGET_NAME).mk
 TARGET_GLOBAL= $(TARGET_BOARD) $(TARGET_CPU)
 
+QUOTE :="
+
 # Try autodetecting the environment
 ifeq ($(SHELLNAMES),)
   # Assume we are making on a Linux platform
 else
-  QUOTE :="
   ifneq ($(COMSPEC),)
     # Assume we are making on a mingw/msys/cygwin platform running on Windows
     # This is a convenient place to override TOOLDIR, DO NOT add trailing
@@ -155,7 +159,6 @@ SHELLNAMES := $(ComSpec)$(COMSPEC)
 # DEFINITIONS                                                      
 ####################################################################
 
-TOOLCHAIN_DIR = shared/toolchain
 OPTIMIZE = s
 OFORMAT = binary
 
@@ -181,24 +184,20 @@ ifeq ($(BUILD_TARGET),)
 endif
 DEFINES += $(BUILD_TARGET)
 
-$(info QK_LIBS=$(QK_LIBS))
-$(info FILTER=$(filter $(QK_LIBS), qkperipheral))
-$(info FILTER=$(findstring qkperipheral, $(QK_LIBS)))
 
-
-QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
-QKLIB_INCLUDES += $(addsuffix /include, qkperipheral)
-QKLIB_INCLUDES += $(addsuffix /include/board/$(TARGET_NAME)/$(TARGET_VARIANT), qkperipheral)
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT), $(EMB_DIR)/qkperipheral)
+QKLIB_INCLUDES += $(addsuffix /include, $(EMB_DIR)/qkperipheral)
+QKLIB_INCLUDES += $(addsuffix /include/board/$(TARGET_NAME)/$(TARGET_VARIANT), $(EMB_DIR)/qkperipheral)
 
 
 ifeq ($(BUILD_TARGET), BUILD_DEVICE)
 #LIB_DIR := $(LIB_DIR)/device
-QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/device, qkprogram)
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/device, $(EMB_DIR)/qkprogram)
 endif
 ifeq ($(BUILD_TARGET), BUILD_COMM)
-QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/comm, qkprogram)
+QKLIB_PATHS += $(addsuffix /build/lib/$(TARGET_NAME)/$(TARGET_VARIANT)/comm, $(EMB_DIR)/qkprogram)
 endif
-QKLIB_INCLUDES += $(addsuffix /include, qkprogram)
+QKLIB_INCLUDES += $(addsuffix /include, $(EMB_DIR)/qkprogram)
 
 QK_LIBS = qkprogram qkperipheral
 
@@ -208,7 +207,7 @@ LIBS += $(addprefix -l, $(QK_LIBS))
 INCLUDE_DIR += $(QKLIB_INCLUDES)
 
 include $(TARGET_GLOBAL)
-include qkperipheral/build/target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
+include $(EMB_DIR)/qkperipheral/build/target/$(TARGET_NAME)/board/$(TARGET_VARIANT).mk
 
 else
 ####################################################################
