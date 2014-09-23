@@ -1,4 +1,5 @@
 embedded/shared/
+embedded/ext/
 software/shared/
 software/tools/
 software/installer/

@@ -1,6 +1,6 @@
 #include <qk_program.h>
 #include <qk_debug.h>
-#include "AllFeatures.h"
+#include "allfeatures.h"
 
 qk_data   dat_buf[DAT_COUNT];
 qk_event  evt_buf[EVT_COUNT];
@@ -51,8 +51,8 @@ void sample_callback()
 
 void action_callback(qk_action_id id)
 {
-//	if(id == 0)
-//		qk_board_led_set(qk_action_get_value_b(0));
+	if(id == 0)
+		qk_board_led_set(qk_action_get_value_b(0));
         //hal_setLED(qk_action_get_value_b(0));
 }
 
