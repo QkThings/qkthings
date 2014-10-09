@@ -20,3 +20,4 @@ deploy/
 *.zip
 *.tar.gz
 *.rar
+.vagrant
