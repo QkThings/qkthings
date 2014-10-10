@@ -1,0 +1,5 @@
+# Configuration for librarian-puppet
+
+forge "http://forge.puppetlabs.com"
+
+mod "puppetlabs/vcsrepo"
