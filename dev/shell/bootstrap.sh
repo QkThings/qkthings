@@ -1,11 +1,11 @@
 #!/bin/sh
 
+DEV_DIR=/vagrant/dev
 PUPPET_DIR=/etc/puppet/
-EMB_SHARED_DIR=/vagrant/embedded/shared
-TOOLCHAIN_TAR=toolchain.tar.gz
-TOOLCHAIN_URL=http://qkthings.com/files/shared/$TOOLCHAIN_TAR
 
-apt-get -q -y update
+TOOLCHAIN_TAR=toolchain.tar.bz2
+TOOLCHAIN_URL=http://qkthings.com/files/shared/$TOOLCHAIN_TAR
+TOOLCHAIN_DIR=/home/vagrant/local/toolchain
 
 install_package () {
   if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
@@ -19,18 +19,6 @@ install_package git
 install_package build-essential
 install_package ruby-dev
 
-if [ ! -d "$EMB_SHARED_DIR" ]; then
-  mkdir -p $EMB_SHARED_DIR
-fi
-
-if [ ! -d "$EMB_SHARED_DIR/toolchain" ]; then
-  cd $EMB_SHARED_DIR
-  echo "Downloading $TOOLCHAIN_URL"
-  wget $TOOLCHAIN_URL -q --timestamp --ignore-length
-  echo "Extracting $TOOLCHAIN_TAR"
-  tar xf $TOOLCHAIN_TAR
-fi
-
 if [ ! -d "$PUPPET_DIR" ]; then
   mkdir -p $PUPPET_DIR
 fi
@@ -42,4 +30,9 @@ if [ "$(gem list -i '^librarian-puppet$')" = "false" ]; then
 else
   cd $PUPPET_DIR && librarian-puppet update
 fi
+
+cd $DEV_DIR
+echo "Installing/checking embedded toolchain"
+sudo python toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
+sudo python toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
 

@@ -21,19 +21,11 @@
 # QkThings. Arduino Makefile
 ###############################################################################
 
-ifeq ($(SHELLNAMES),)
-CC      = $(TOOLCHAIN_DIR)/linux/avr/bin/avr-gcc
-OBJCOPY = $(TOOLCHAIN_DIR)/linux/avr/bin/avr-objcopy
-AR		= $(TOOLCHAIN_DIR)/linux/avr/bin/avr-ar
-DUMP    = $(TOOLCHAIN_DIR)/linux/avr/bin/avr-objdump
-PSIZE	= $(TOOLCHAIN_DIR)/linux/avr/bin/avr-size
-else
-CC      = $(TOOLCHAIN_DIR)/win/avr/bin/avr-gcc
-OBJCOPY = $(TOOLCHAIN_DIR)/win/avr/bin/avr-objcopy
-AR		= $(TOOLCHAIN_DIR)/win/avr/bin/avr-ar
-DUMP    = $(TOOLCHAIN_DIR)/win/avr/bin/avr-objdump
-PSIZE	= $(TOOLCHAIN_DIR)/win/avr/bin/avr-size
-endif
+CC      = $(TOOLCHAIN_DIR)/cpu/avr/linux/bin/avr-gcc
+OBJCOPY = $(TOOLCHAIN_DIR)/cpu/avr/linux/bin/avr-objcopy
+AR		= $(TOOLCHAIN_DIR)/cpu/avr/linux/bin/avr-ar
+DUMP    = $(TOOLCHAIN_DIR)/cpu/avr/linux/bin/avr-objdump
+PSIZE	= $(TOOLCHAIN_DIR)/cpu/avr/linux/bin/avr-size
 
 OFORMAT = ihex
 
@@ -68,12 +60,8 @@ CFLAGS += -Wall -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 ###############################################################################
 #PORT = COM19
 #UPLOAD_RATE = 115200
-ifeq ($(SHELLNAMES),)
-AVRDUDE = $(TOOLCHAIN_DIR)/linux/avr/avrdude
-else
-AVRDUDE = $(TOOLCHAIN_DIR)/win/avr/avrdude
-endif
-AVRDUDE_CONF = $(TOOLCHAIN_DIR)/common/arduino
+AVRDUDE = $(TOOLCHAIN_DIR)/cpu/avr/linux/avrdude
+AVRDUDE_CONF = $(TOOLCHAIN_DIR)/platform/arduino/common
 AVRDUDE_PROGRAMMER = stk500
 AVRDUDE_PORT = $(PORT)
 AVRDUDE_WRITE_FLASH = -U flash:w:$(FILE):i

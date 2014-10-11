@@ -2,6 +2,7 @@ exec { 'sudo apt-get update':
     path => '/usr/bin/' }
 
 package { 'git': }
+package { 'doxygen': }
 package { 'qt5-default': }
 package { 'qtcreator': }
 package { 'libqt5serialport5-dev': }
@@ -16,7 +17,7 @@ define clone_embedded_repo {
 }
 clone_embedded_repo { $embedded_repos: }	
 
-$software_repos = [ qkcore, qkwidget, qkide, qkdaemon ]
+$software_repos = [ qkcore, qkwidget, qkide, qkdaemon, qkapi ]
 define clone_software_repo {
 	vcsrepo { "/vagrant/software/$name":
 		ensure => present,

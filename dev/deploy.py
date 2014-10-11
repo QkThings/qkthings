@@ -9,7 +9,7 @@ import argparse
 import os, tarfile, datetime
 import time
 
-DEPLOY_DIR="./deploy"
+DEPLOY_DIR="./release"
 
 def make_tarfile(source_dir, output_filename):
     with tarfile.open(output_filename, "w:gz") as tar:

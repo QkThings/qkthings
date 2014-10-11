@@ -3,6 +3,7 @@ embedded/ext/
 software/shared/
 software/tools/
 software/installer/
+dev/release
 output/
 deploy/
 */shared/

@@ -19,14 +19,7 @@ This will create a virtual machine with all the tools and libraries you need to 
 
     vagrant up
 
-1. Wait for the machine to finish installing and 
+1. It will take some minutes, be patient. Now you have a virutal machine with 
 
-    vagrant ssh -c qtcreator -Y
-
-1. Go to
-
-    "Tools" > "Options..." > "Build & Run"
-
- and replace the "../" in the "Default build directory" field with "/home/vagrant/". This is to workaround issues with symlinks in Vagrant shared folders.
 1. Happy Hacking!
 
