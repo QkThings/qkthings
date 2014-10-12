@@ -43,11 +43,11 @@ endif
 # DIRS and FILES
 ###############################################################################
 
-ENERGYMICRO = $(TOOLCHAIN_DIR)/common/energymicro
+ENERGYMICRO = $(TOOLCHAIN_DIR)/platform/efm32/common
 #WINDOWSCS  ?= GNU Tools ARM Embedded\4.7 2013q1
 #LINUXCS    ?= /home/mribeiro/gcc-arm-none-eabi-4_7-2013q1
 
-TOOLDIR := $(TOOLCHAIN_DIR)/linux/arm/gcc
+TOOLDIR := $(TOOLCHAIN_DIR)/cpu/arm/linux
 
 CC      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-gcc$(QUOTE)
 LD      = $(QUOTE)$(TOOLDIR)/bin/arm-none-eabi-ld$(QUOTE)
