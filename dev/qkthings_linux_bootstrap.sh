@@ -35,6 +35,7 @@ install_package git
 install_package build-essential
 install_package colormake
 install_package doxygen
+install_package freeglut3-dev
 
 if [ ! -d "$QKTHINGS_DIR" ]; then
   cd ~
