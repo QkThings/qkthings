@@ -3,10 +3,7 @@
 
 QKTHINGS_DIR=~/qkthings
 DEV_DIR=$QKTHINGS_DIR/dev
-TEMP_DIR=$QKTHINGS_DOR/temp
 
-TOOLCHAIN_TAR=toolchain.tar.bz2
-TOOLCHAIN_URL=http://qkthings.com/files/shared/$TOOLCHAIN_TAR
 TOOLCHAIN_DIR=$QKTHINGS_DIR/embedded/shared/toolchain
 
 QTSDK_URL=http://download.qt-project.org/archive/qt/5.1/5.1.1/qt-linux-opensource-5.1.1-x86-offline.run
