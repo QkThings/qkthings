@@ -32,6 +32,8 @@ clone_repo () {
 }
 
 install_package git
+install_package git-cola
+install_package meld
 install_package build-essential
 install_package colormake
 install_package doxygen

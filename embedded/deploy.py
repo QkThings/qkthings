@@ -12,12 +12,13 @@ def unset_all():
 def deploy():
 	print " ### Deploy embedded"
 	rootdir = getcwd()
+	devnull = open('/dev/null', 'w')
 
 	targets = []
 	targets.append("arduino.uno")
 	targets.append("arduino.nano")
-	targets.append("efm32.g_olimex")
-	targets.append("efm32.dev_tg")
+#	targets.append("efm32.g_olimex")
+#	targets.append("efm32.dev_tg")
 	targets.append("efm32.dev_tg_revb")
 
 
@@ -29,7 +30,8 @@ def deploy():
 	for target in targets:
 		for lib in libs:
 			chdir(path.join(rootdir,lib))
-			call(["python", "deploy.py"])		
+			print " === Deploy %s %s" % (target, lib)
+			call(["python", "deploy.py"],stdout=devnull, stderr=devnull)		
 
 	libs = []
 	libs.append("qkprogram")
@@ -38,9 +40,9 @@ def deploy():
 		for lib in libs:	
 			chdir(rootdir)
 			unset_all()
-			print " === Build LIB=%s for TARGET=%s" % (lib, target)
-			call(["make","clean","LIB=%s" % lib,"TARGET=%s" % target])
-			call(["make","lib","LIB=%s" % lib,"TARGET=%s" % target])
+			print " === Build %s %s" % (target, lib)
+			call(["make","clean","LIB=%s" % lib,"TARGET=%s" % target], stdout=devnull, stderr=devnull)
+			call(["make","lib","LIB=%s" % lib,"TARGET=%s" % target], stdout=devnull, stderr=devnull)
 
 
 if __name__ == "__main__":
