@@ -38,6 +38,7 @@ install_package build-essential
 install_package colormake
 install_package doxygen
 install_package freeglut3-dev
+install_package libusb-dev
 
 if [ ! -d "$QKTHINGS_DIR" ]; then
   cd ~
