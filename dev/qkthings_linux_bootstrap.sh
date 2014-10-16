@@ -62,6 +62,7 @@ cd $DEV_DIR
 echo "Installing/checking embedded toolchain"
 sudo python toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
 sudo python toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
+chown -R $SUDO_USER $TOOLCHAIN_DIR
 
 cd ~/Downloads
 wget $QTSDK_URL --timestamp --ignore-length
