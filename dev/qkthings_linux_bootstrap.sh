@@ -44,7 +44,6 @@ install_package openssh-server
 if [ ! -d "$QKTHINGS_DIR" ]; then
   cd ~
   git clone https://github.com/qkthings/qkthings
-  chown -R $SUDO_USER $QKTHINGS_DIR
 fi
 
 clone_repo $QKTHINGS_DIR/embedded/ qkprogram
@@ -62,16 +61,17 @@ cd $DEV_DIR
 echo "Installing/checking embedded toolchain"
 sudo python toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
 sudo python toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
-chown -R $SUDO_USER $TOOLCHAIN_DIR
 
 cd ~/Downloads
 wget $QTSDK_URL --timestamp --ignore-length
 chmod +x $QTSDK_RUN
 ./$QTSDK_RUN
 
-chown -R $SUDO_USER ~/.config
-
 adduser $SUDO_USER dialout
+
+chown -R $SUDO_USER ~/.config
+chown -R $SUDO_USER $QKTHINGS_DIR
+chown -R $SUDO_USER $TOOLCHAIN_DIR
 
 if test "$(cat ~/.bashrc | grep "make=colormake" 2>/dev/null)" ; then
 echo "make is already colormake"
