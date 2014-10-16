@@ -21,7 +21,8 @@
 .PHONY: lib app test clean upload savetarget
 
 EMB_DIR = .
-TOOLCHAIN_DIR = shared/toolchain
+#TOOLCHAIN_DIR = shared/toolchain
+TOOLCHAIN_DIR = ~/qkthings_local/toolchain
 $(info TOOLCHAIN_DIR = $(TOOLCHAIN_DIR))
 
 ####################################################################

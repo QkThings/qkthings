@@ -4,7 +4,7 @@
 QKTHINGS_DIR=~/qkthings
 DEV_DIR=$QKTHINGS_DIR/dev
 
-TOOLCHAIN_DIR=$QKTHINGS_DIR/embedded/shared/toolchain
+TOOLCHAIN_DIR=~/qkthings_local/toolchain
 
 QTSDK_URL=http://download.qt-project.org/archive/qt/5.1/5.1.1/qt-linux-opensource-5.1.1-x86-offline.run
 QTSDK_RUN=qt-linux-opensource-5.1.1-x86-offline.run
@@ -39,6 +39,7 @@ install_package colormake
 install_package doxygen
 install_package freeglut3-dev
 install_package libusb-dev
+install_package openssh-server
 
 if [ ! -d "$QKTHINGS_DIR" ]; then
   cd ~
