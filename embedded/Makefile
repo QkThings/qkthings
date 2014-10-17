@@ -22,7 +22,7 @@
 
 EMB_DIR = .
 #TOOLCHAIN_DIR = shared/toolchain
-TOOLCHAIN_DIR = ~/qkthings_local/toolchain
+TOOLCHAIN_DIR = /home/$(USER)/qkthings_local/toolchain
 $(info TOOLCHAIN_DIR = $(TOOLCHAIN_DIR))
 
 ####################################################################
@@ -237,18 +237,18 @@ ARFLAGS = rcs
 ####################################################################
 
 # Create directories and do a clean which is compatible with parallell make
-$(shell mkdir -p $(OBJ_DIR)>$(NULLDEVICE) 2>&1)
+$(shell mkdir -p $(OBJ_DIR))
 ifneq ($(MAKECMDGOALS),lib)
-$(shell mkdir -p $(BIN_DIR)>$(NULLDEVICE) 2>&1)
+$(shell mkdir -p $(BIN_DIR))
 endif
 ifeq ($(MAKECMDGOALS),lib)
-  $(shell mkdir -p $(LIB_DIR)>$(NULLDEVICE) 2>&1)
+  $(shell mkdir -p $(LIB_DIR))
 endif
 ifeq (clean,$(findstring clean, $(MAKECMDGOALS)))
   ifneq ($(filter $(MAKECMDGOALS),all debug release),)
-    $(shell $(RMFILES) $(OBJ_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
-    $(shell $(RMFILES) $(BIN_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
-    $(shell $(RMFILES) $(LIB_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
+    $(shell $(RMFILES) $(OBJ_DIR)$(ALLFILES))
+    $(shell $(RMFILES) $(BIN_DIR)$(ALLFILES))
+    $(shell $(RMFILES) $(LIB_DIR)$(ALLFILES))
   endif
 endif
 
