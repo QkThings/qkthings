@@ -237,18 +237,18 @@ ARFLAGS = rcs
 ####################################################################
 
 # Create directories and do a clean which is compatible with parallell make
-$(shell mkdir -p $(OBJ_DIR))
+$(shell mkdir -p $(OBJ_DIR)>$(NULLDEVICE) 2>&1)
 ifneq ($(MAKECMDGOALS),lib)
-$(shell mkdir -p $(BIN_DIR))
+$(shell mkdir -p $(BIN_DIR)>$(NULLDEVICE) 2>&1)
 endif
 ifeq ($(MAKECMDGOALS),lib)
-  $(shell mkdir -p $(LIB_DIR))
+  $(shell mkdir -p $(LIB_DIR)>$(NULLDEVICE) 2>&1)
 endif
 ifeq (clean,$(findstring clean, $(MAKECMDGOALS)))
   ifneq ($(filter $(MAKECMDGOALS),all debug release),)
-    $(shell $(RMFILES) $(OBJ_DIR)$(ALLFILES))
-    $(shell $(RMFILES) $(BIN_DIR)$(ALLFILES))
-    $(shell $(RMFILES) $(LIB_DIR)$(ALLFILES))
+    $(shell $(RMFILES) $(OBJ_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
+    $(shell $(RMFILES) $(BIN_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
+    $(shell $(RMFILES) $(LIB_DIR)$(ALLFILES)>$(NULLDEVICE) 2>&1)
   endif
 endif
 

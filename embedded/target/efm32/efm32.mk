@@ -124,6 +124,6 @@ LIBS += -Wl,--start-group -lc -lgcc -lnosys  -Wl,--end-group
 ###############################################################################
 # UPLOAD
 ###############################################################################
-EFM32_LOADER=/home/mribeiro/github/qkthings/software/qkloader/efm32_loader/release/efm32_loader
+EFM32_LOADER=/home/$(USER)/qkthings_local/build/qt/efm32_loader/release/efm32_loader
 UPLOAD_CMD = $(EFM32_LOADER) $(PORT) $(FILE)
 

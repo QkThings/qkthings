@@ -35,7 +35,7 @@ clone_repo () {
 }
 
 if [ -z $1 ]; then
-  ROOT_DIR=~
+  ROOT_DIR=/home/$SUDO_USER/
 else
   ROOT_DIR=$1
 
@@ -51,11 +51,14 @@ else
 fi
 
 QKTHINGS_DIR=$ROOT_DIR/qkthings
+QKTHINGS_LOCAL=/home/$SUDO_USER
 DEV_DIR=$QKTHINGS_DIR/dev
-TOOLCHAIN_DIR=$ROOT_DOR/qkthings_local/toolchain
+TOOLCHAIN_DIR=$QKTHINGS_LOCAL/qkthings_local/toolchain
 
-QTSDK_URL=http://download.qt-project.org/archive/qt/5.1/5.1.1/qt-linux-opensource-5.1.1-x86-offline.run
-QTSDK_RUN=qt-linux-opensource-5.1.1-x86-offline.run
+#QTSDK_URL=http://download.qt-project.org/archive/qt/5.1/5.1.1/qt-linux-opensource-5.1.1-x86-offline.run
+#QTSDK_RUN=qt-linux-opensource-5.1.1-x86-offline.run
+QTSDK_URL=http://download.qt-project.org/archive/qt/5.3/5.3.2/qt-opensource-linux-x86-5.3.2.run
+QTSDK_RUN=qt-opensource-linux-x86-5.3.2.run
 
 install_package git
 install_package git-cola
@@ -100,9 +103,9 @@ chmod +x $QTSDK_RUN
 
 adduser $SUDO_USER dialout
 
-chown -R $SUDO_USER ~/.config
+chown -R $SUDO_USER /home/$SUDO_USER/.config
 chown -R $SUDO_USER $QKTHINGS_DIR
-chown -R $SUDO_USER $TOOLCHAIN_DIR
+chown -R $SUDO_USER $QKTHINGS_LOCAL
 
 if test "$(cat ~/.bashrc | grep "make=colormake" 2>/dev/null)" ; then
 echo "make is already colormake"
