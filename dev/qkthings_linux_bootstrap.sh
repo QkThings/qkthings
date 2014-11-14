@@ -55,8 +55,6 @@ QKTHINGS_LOCAL=/home/$SUDO_USER
 DEV_DIR=$QKTHINGS_DIR/dev
 TOOLCHAIN_DIR=$QKTHINGS_LOCAL/qkthings_local/toolchain
 
-#QTSDK_URL=http://download.qt-project.org/archive/qt/5.1/5.1.1/qt-linux-opensource-5.1.1-x86-offline.run
-#QTSDK_RUN=qt-linux-opensource-5.1.1-x86-offline.run
 QTSDK_URL=http://download.qt-project.org/archive/qt/5.3/5.3.2/qt-opensource-linux-x86-5.3.2.run
 QTSDK_RUN=qt-opensource-linux-x86-5.3.2.run
 
@@ -89,8 +87,6 @@ else
   echo "! $QKTHINGS_DIR already exists (repos won't be cloned)"
 fi
 
-
-
 cd $DEV_DIR
 echo "Installing/checking embedded toolchain"
 sudo python toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
@@ -116,6 +112,3 @@ fi
 echo "\nDone! Now what?"
 echo "Building instructions: http://discourse.qkthings.com/t/building-instructions/20"
 echo "Give feedback, don't hesitate to get in touch. Happy hacking!"
-
-
-
