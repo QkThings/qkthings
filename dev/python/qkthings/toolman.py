@@ -40,7 +40,8 @@ def run(target, dist, root, keep_archive=False, clean=False):
 	_get_toolchain(["cpu",      targets[target].cpu, dist],          root, keep_archive, clean)
 	_get_toolchain(["platform", targets[target].platform, "common"], root, keep_archive, clean)
 
-if __name__ == "__main__":
+
+def _main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-t","--target", required=True, help='')
 	parser.add_argument("-r","--root", required=True, help='toolchain root folder')
@@ -63,3 +64,6 @@ if __name__ == "__main__":
 		return
 
 	run(args.target, args.dist, args.root, args.keep_archive, args.clean)
+
+if __name__ == "__main__":
+	_main()
