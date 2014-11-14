@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from os import path
+from os import path, remove
 from utils import check_path, download, extract
 
 TOOLCHAIN_FORGE = "http://qkthings.com/files/shared/toolchain/"
@@ -32,7 +32,7 @@ def _get_toolchain(tree, root, keep_archive=False, clean=False):
 		if download(TOOLCHAIN_FORGE + archive, archive_dir):
 			extract(archive_dir, dir)
 			if not keep_archive:
-				os.remove(archive_dir)
+				remove(archive_dir)
 	else:
 		print "! %s already exists" % dir
 	
