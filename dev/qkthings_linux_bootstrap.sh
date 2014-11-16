@@ -73,6 +73,7 @@ if [ ! -d "$QKTHINGS_DIR" ]; then
   #git clone https://github.com/qkthings/qkthings
   clone_repo $ROOT_DIR qkthings
 
+  clone_repo $QKTHINGS_DIR embedded
   clone_repo $QKTHINGS_DIR/embedded/ qkprogram
   clone_repo $QKTHINGS_DIR/embedded/ qkperipheral
   clone_repo $QKTHINGS_DIR/embedded/ qkdsp
@@ -89,8 +90,8 @@ fi
 
 cd $DEV_DIR
 echo "Installing/checking embedded toolchain"
-sudo python toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
-sudo python toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
+sudo python python/qkthings/toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
+sudo python python/qkthings/toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
 
 cd ~/Downloads
 wget $QTSDK_URL --timestamp --ignore-length
