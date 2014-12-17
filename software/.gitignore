@@ -1,10 +1,7 @@
-dev/release
-*/shared/
-*shared*
+shared/
 *.so*
-*.dll
 *.*~
-x*~
+*~
 *.a
 *.o
 *.d
