@@ -3,9 +3,20 @@
 from os import getcwd, chdir, path
 from distutils.dir_util import copy_tree, remove_tree, mkpath
 from subprocess import call
-import tarfile, datetime, urllib
+import platform, tarfile, datetime, urllib
 
 devnull = open('/dev/null', 'w')
+
+def os_name():
+	platsys = platform.system();
+	name = ""
+	if platsys == "Windows":
+		name = "win"
+	elif platsys == "Linux":
+		name = "linux"
+	else:
+		print "OS not supported"
+	return name
 
 def cp(root_src,root_dest,rel_path):
 	print "Copying %s from %s to %s" % (rel_path, root_src, root_dest)
@@ -39,9 +50,13 @@ def extract(file, dest):
 	tar.extractall(path=dest)
 	tar.close()
 
-def cmd(line,verbose):
+def cmd(line,verbose=False):
 	if verbose:
 		ret = call(line)
 	else:
 		ret = call(line, stdout=devnull, stderr=devnull)
 	#print "return",ret
+
+def make_tarfile(source_dir, output_filename):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=path.basename(source_dir))

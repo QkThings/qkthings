@@ -20,6 +20,8 @@
 #include "qkutils.h"
 
 #include <QDebug>
+#include <QApplication>
+#include <QStyleFactory>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
