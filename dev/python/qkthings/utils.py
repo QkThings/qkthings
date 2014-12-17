@@ -60,3 +60,10 @@ def cmd(line,verbose=False):
 def make_tarfile(source_dir, output_filename):
     with tarfile.open(output_filename, "w:gz") as tar:
         tar.add(source_dir, arcname=path.basename(source_dir))
+
+def deploy(path, params, verbose=False):
+	cwd = getcwd()
+	chdir(path)
+	cmd(["python", "deploy.py"] + params, verbose)
+	chdir(cwd)
+	

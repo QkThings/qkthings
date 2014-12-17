@@ -9,70 +9,52 @@ import argparse
 import os, tarfile, datetime
 import time
 
-from qkthings.utils import cmd, os_name, make_tarfile
+from qkthings.utils import cmd, os_name, make_tarfile, check_path, deploy
 	
-def deploy():
+def main():
 	if os_name() == "":
 		return
 
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--dist", action="store_true", help='create distributable tarball')
+	parser.add_argument("--verbose", action="store_true", help='verbose mode')
 	args = parser.parse_args()
 	
-	print "! Deploying QkThings for %s %s %s" % (os_name(), platform.release(), platform.version())
+	print "! Deploying QkThings for %s" % (os_name())
+	print platform.release(), platform.version()
 	print "The whole process may take a while. Be patient."
 	
 	root_dir     = getcwd()
+	build_dir    = path.expanduser("~/qkthings_local/build")
 	release_dir  = path.expanduser("~/qkthings/dev/release")
 	qkthings_dir = path.join(release_dir, "qkthings_" + time.strftime("%Y%m%d"))
 	dist_dir     = path.join(release_dir, "dist")
-	
-	qkthings_local_build = path.expanduser("~/qkthings_local/build")
 
-	if not path.exists(qkthings_dir):
-		mkpath(qkthings_dir)
-	else:
-		print "! Cleaning", qkthings_dir
-		remove_tree(qkthings_dir)
+	check_path(release_dir, True)
+	check_path(dist_dir)
+	check_path(qkthings_dir)
 
-	if not path.exists(dist_dir):
-		mkpath(dist_dir)
-	
-	'''
-	print "! Deploying QkIDE..."
-	chdir("software/qkide")
-	call(["python", "deploy.py", "--clean", "--emb", "--toolchain"])
-	chdir(root_dir)
-	'''
+	print "! Deploying QkDaemon"
+	deploy("software/qkdaemon", ["--clean"], args.verbose)
 
-	print "! Deploying QkDaemon..."
-	chdir("software/qkdaemon")
-	cmd(["python", "deploy.py", "--clean"])
-	chdir(root_dir)
-
-	print "! Deploying QkAPI..."
-	chdir("software/qkdaemon")
-	cmd(["python", "deploy.py", "--clean"])
-	chdir(root_dir)
+	print "! Deploying QkAPI"
+	deploy("software/qkapi", ["--clean"], args.verbose)
 
 
-	#print "! Copying QkIDE..."
-	#copy_tree("software/qkide/release", qkthings_dir + "/qkide")
+	print "! Copying QkDaemon"
+	copy_tree(build_dir + "/qt/qkdaemon/release", qkthings_dir + "/qkdaemon")
 
-	print "! Copying QkDaemon..."
-	copy_tree(qkthings_local_build + "/qt/qkdaemon/release", qkthings_dir + "/qkdaemon")
-
-	print "! Copying QkAPI..."
+	print "! Copying QkAPI"
 	copy_tree("software/qkapi/python", qkthings_dir + "/qkapi/python")
 
-	print "! Copying Qt platforms..."
+	print "! Copying Qt platforms"
 	#copy_tree("dev/deploy/linux/qt/platforms", qkthings_dir + "/qkide/platforms")
 	copy_tree("dev/deploy/linux/qt/platforms", qkthings_dir + "/qkdaemon/platforms")
 
-	print "! Copying libraries..."
-	copy_tree(qkthings_local_build + "/qt/qkcore/release", qkthings_dir + "/shared/lib")
-	copy_tree(qkthings_local_build + "/qt/qkwidget/release", qkthings_dir + "/shared/lib")
-	copy_tree(qkthings_local_build + "/qt/qkapi/release", qkthings_dir + "/shared/lib")
+	print "! Copying libraries"
+	copy_tree(build_dir + "/qt/qkcore/release", qkthings_dir + "/shared/lib")
+	copy_tree(build_dir + "/qt/qkwidget/release", qkthings_dir + "/shared/lib")
+	copy_tree(build_dir + "/qt/qkapi/release", qkthings_dir + "/shared/lib")
 	copy_tree("dev/deploy/linux/qt/lib", qkthings_dir + "/shared/lib")
 
 	if args.dist:
@@ -82,7 +64,7 @@ def deploy():
 		
 
 if __name__ == "__main__":
-	deploy();
+	main();
 
 
 
