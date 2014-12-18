@@ -5,6 +5,7 @@ dev/release
 *.dll
 *.*~
 x*~
+*.pyc
 *.a
 *.o
 *.d

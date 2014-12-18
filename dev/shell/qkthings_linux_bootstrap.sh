@@ -26,7 +26,6 @@ install_package () {
 }
 
 clone_repo () {
-  #if [ ! -d $2 ]; then
   if test "$(ls -A "$1/$2" 2>/dev/null)"; then
     echo "! $2 already cloned"
   else
@@ -37,15 +36,15 @@ clone_repo () {
 
 append_to_file () {
   if test "$(cat $1 | grep "$2" 2>/dev/null)" ; then
-    echo "$2 is already in $1"
+    echo -e "$2 is already in $1"
   else
-    echo "Setting $2 in $1"
+    echo -e "Setting $2 in $1"
     echo $2 >> $1
   fi
 }
 
 if [ -z $1 ]; then
-  ROOT_DIR=/home/$SUDO_USER/
+  ROOT_DIR=/home/$SUDO_USER
 else
   ROOT_DIR=$1
 fi
@@ -87,7 +86,7 @@ clone_repo $QKTHINGS_DIR/embedded qkprogram
 clone_repo $QKTHINGS_DIR/embedded qkperipheral
 clone_repo $QKTHINGS_DIR/embedded qkdsp
 
-clone_repo $QKTHINGS_DIR/ software
+clone_repo $QKTHINGS_DIR software
 clone_repo $QKTHINGS_DIR/software qkcore
 clone_repo $QKTHINGS_DIR/software qkwidget
 clone_repo $QKTHINGS_DIR/software qkapi
@@ -117,7 +116,7 @@ echo "Setting up Qt"
 QTCHOOSER_DIR=/usr/lib/i386-linux-gnu/qtchooser/
 cd $QTCHOOSER_DIR
 rm qt5.conf
-echo "/opt/Qt5.3.2/5.3/gcc/bin/\n/opt" >> qt5.conf
+echo -e "/opt/Qt5.3.2/5.3/gcc/bin/\n/opt" >> qt5.conf
 cp qt5.conf default.conf
 
 adduser $SUDO_USER dialout
@@ -127,8 +126,8 @@ chown -R $SUDO_USER $QKTHINGS_DIR
 chown -R $SUDO_USER $QKTHINGS_LOCAL
 
 append_to_file ~/.bashrc "alias make=colormake"
-append_to_file ~/.profile QKTHINGS_DIR=$QKTHINGS_DIR
-append_to_file ~/.profile QKTHINGS_LOCAL=$QKTHINGS_LOCAL
+append_to_file ~/.profile "export QKTHINGS_DIR=$QKTHINGS_DIR"
+append_to_file ~/.profile "QKTHINGS_LOCAL=$QKTHINGS_LOCAL"
 
 source ~/.profile
 
