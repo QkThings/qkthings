@@ -86,6 +86,8 @@ clone_repo $QKTHINGS_DIR/embedded qkprogram
 clone_repo $QKTHINGS_DIR/embedded qkperipheral
 clone_repo $QKTHINGS_DIR/embedded qkdsp
 
+clone_repo $QKTHINGS_DIR/embedded/board comm_bt_2_0
+
 clone_repo $QKTHINGS_DIR software
 clone_repo $QKTHINGS_DIR/software qkcore
 clone_repo $QKTHINGS_DIR/software qkwidget
