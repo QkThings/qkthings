@@ -127,7 +127,7 @@ chown -R $SUDO_USER $QKTHINGS_LOCAL
 
 append_to_file ~/.bashrc "alias make=colormake"
 append_to_file ~/.profile "export QKTHINGS_DIR=$QKTHINGS_DIR"
-append_to_file ~/.profile "QKTHINGS_LOCAL=$QKTHINGS_LOCAL"
+append_to_file ~/.profile "export QKTHINGS_LOCAL=$QKTHINGS_LOCAL"
 
 source ~/.profile
 
