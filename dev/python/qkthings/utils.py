@@ -61,9 +61,24 @@ def make_tarfile(source_dir, output_filename):
     with tarfile.open(output_filename, "w:gz") as tar:
         tar.add(source_dir, arcname=path.basename(source_dir))
 
-def deploy(path, params, verbose=False):
+def deploy(deploy_path, params, verbose=False):
 	cwd = getcwd()
-	chdir(path)
-	cmd(["python", "deploy.py"] + params, verbose)
+	chdir(deploy_path)
+	if path.exists("deploy.py"):
+		cmd(["python", "deploy.py"] + params, verbose)
+	elif verbose:
+		print "Deploy file not found"
+	chdir(cwd)
+
+def qt_build(pro_dir, build_dir, clean=False, verbose=False):
+	cwd = getcwd()
+	full_build_dir = path.expanduser(build_dir)
+	full_pro_dir = path.join(cwd, pro_dir)
+	check_path(full_build_dir)
+	chdir(full_build_dir)
+	cmd(["qmake",full_pro_dir], verbose)
+	if clean:
+		cmd(["make","clean"], verbose)
+	cmd(["make"], verbose)
 	chdir(cwd)
 	

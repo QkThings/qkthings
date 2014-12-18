@@ -34,26 +34,36 @@ clone_repo () {
   fi
 }
 
+append_to_file () {
+  if test "$(cat $1 | grep "$2" 2>/dev/null)" ; then
+    echo "$2 is already in $1"
+  else
+    echo "Setting $2 in $1"
+    echo $2 >> $1
+  fi
+}
+
 if [ -z $1 ]; then
   ROOT_DIR=/home/$SUDO_USER/
 else
   ROOT_DIR=$1
+fi
 
-  echo "\nBootstrap QkThings here: $ROOT_DIR"
-  if ! confirm ; then
-    echo "Aborted"
-    return
-  else
-    if [ ! -d "$ROOT_DIR" ]; then
-      mkdir -p $ROOT_DIR
-    fi
-  fi
+echo "\nBootstrap QkThings here: $ROOT_DIR"
+if ! confirm ; then
+  echo "Aborted"
+  return
+elif [ ! -d "$ROOT_DIR" ]; then
+  mkdir -p $ROOT_DIR
 fi
 
 QKTHINGS_DIR=$ROOT_DIR/qkthings
-QKTHINGS_LOCAL=/home/$SUDO_USER
+QKTHINGS_LOCAL=/home/$SUDO_USER/qkthings_local
 DEV_DIR=$QKTHINGS_DIR/dev
-TOOLCHAIN_DIR=$QKTHINGS_LOCAL/qkthings_local/toolchain
+TOOLCHAIN_DIR=$QKTHINGS_LOCAL/toolchain
+
+echo QKTHINGS_DIR=$QKTHINGS_DIR
+echo QKTHINGS_LOCAL=$QKTHINGS_LOCAL
 
 QTSDK_URL=http://download.qt-project.org/archive/qt/5.3/5.3.2/qt-opensource-linux-x86-5.3.2.run
 QTSDK_RUN=qt-opensource-linux-x86-5.3.2.run
@@ -67,6 +77,7 @@ install_package doxygen
 install_package freeglut3-dev
 install_package libusb-dev
 install_package openssh-server
+install_package qtchooser
 
 if [ ! -d "$QKTHINGS_DIR" ]; then
 #  cd $ROOT_DIR
@@ -78,6 +89,7 @@ if [ ! -d "$QKTHINGS_DIR" ]; then
   clone_repo $QKTHINGS_DIR/embedded/ qkperipheral
   clone_repo $QKTHINGS_DIR/embedded/ qkdsp
 
+  clone_repo $QKTHINGS_DIR software
   clone_repo $QKTHINGS_DIR/software/ qkcore
   clone_repo $QKTHINGS_DIR/software/ qkwidget
   clone_repo $QKTHINGS_DIR/software/ qkapi
@@ -93,10 +105,21 @@ echo "Installing/checking embedded toolchain"
 sudo python python/qkthings/toolman.py -t arduino -r $TOOLCHAIN_DIR --dist=linux
 sudo python python/qkthings/toolman.py -t efm32 -r $TOOLCHAIN_DIR --dist=linux
 
+cd $DEV_DIR/python
+echo "Installing Python tools"
+sudo python setup.py install
+
 cd ~/Downloads
 wget $QTSDK_URL --timestamp --ignore-length
 chmod +x $QTSDK_RUN
 ./$QTSDK_RUN
+
+echo "Setting up Qt"
+QTCHOOSER_DIR=/usr/lib/i386-linux-gnu/qtchooser/
+cd $QTCHOOSER_DIR
+rm qt5.conf
+echo "/opt/Qt5.3.2/5.3/gcc/bin/\n/opt" >> qt5.conf
+cp qt5.conf default.conf
 
 adduser $SUDO_USER dialout
 
@@ -104,11 +127,11 @@ chown -R $SUDO_USER /home/$SUDO_USER/.config
 chown -R $SUDO_USER $QKTHINGS_DIR
 chown -R $SUDO_USER $QKTHINGS_LOCAL
 
-if test "$(cat ~/.bashrc | grep "make=colormake" 2>/dev/null)" ; then
-echo "make is already colormake"
-else
-echo "alias make=colormake" >> ~/.bashrc
-fi
+append_to_file ~/.bashrc "alias make=colormake"
+append_to_file ~/.profile QKTHINGS_DIR=$QKTHINGS_DIR
+append_to_file ~/.profile QKTHINGS_LOCAL=$QKTHINGS_LOCAL
+
+source ~/.profile
 
 echo "\nDone! Now what?"
 echo "Building instructions: http://discourse.qkthings.com/t/building-instructions/20"

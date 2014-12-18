@@ -34,12 +34,14 @@ def main():
 	check_path(dist_dir)
 	check_path(qkthings_dir)
 
-	print "! Deploying QkDaemon"
-	deploy("software/qkdaemon", ["--clean"], args.verbose)
+	projs_to_deploy = []
+	projs_to_deploy.append(["QkDaemon", "software/qkdaemon", ["--clean"]])
+	projs_to_deploy.append(["QkAPI"   , "software/qkapi"   , ["--clean"]])
 
-	print "! Deploying QkAPI"
-	deploy("software/qkapi", ["--clean"], args.verbose)
-
+	for proj in projs_to_deploy:
+		print "! Deploying %s" % proj[0]
+		deploy(proj[1], proj[2], args.verbose)
+	return
 
 	print "! Copying QkDaemon"
 	copy_tree(build_dir + "/qt/qkdaemon/release", qkthings_dir + "/qkdaemon")
