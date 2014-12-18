@@ -135,8 +135,10 @@ source ~/.profile
 
 echo -e QKTHINGS_DIR=$QKTHINGS_DIR
 echo -e QKTHINGS_LOCAL=$QKTHINGS_LOCAL
-echo -e "You should re-login."
 
-echo -e "\nDone! Now what?"
+cd $DEV_DIR
+python bootstrap/build_proj.py --verbose
+
+echo -e "\nDone! Now you sould re-login.\nWhat's next?"
 echo -e "Building instructions: http://discourse.qkthings.com/t/building-instructions/20"
 echo -e "Give feedback, don't hesitate to get in touch. Happy hacking!"
