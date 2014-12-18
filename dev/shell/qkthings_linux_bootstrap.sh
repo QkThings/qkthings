@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #set -x
 
 if [ $(/usr/bin/id -u) -ne 0 ]; then
@@ -26,7 +26,8 @@ install_package () {
 }
 
 clone_repo () {
-  if test "$(ls -A "$1$2" 2>/dev/null)"; then
+  #if [ ! -d $2 ]; then
+  if test "$(ls -A "$1/$2" 2>/dev/null)"; then
     echo "! $2 already cloned"
   else
     cd $1
@@ -49,7 +50,7 @@ else
   ROOT_DIR=$1
 fi
 
-echo "\nBootstrap QkThings here: $ROOT_DIR"
+echo -e "\nBootstrap QkThings here: $ROOT_DIR"
 if ! confirm ; then
   echo "Aborted"
   return
@@ -79,26 +80,24 @@ install_package libusb-dev
 install_package openssh-server
 install_package qtchooser
 
-if [ ! -d "$QKTHINGS_DIR" ]; then
-#  cd $ROOT_DIR
-  #git clone https://github.com/qkthings/qkthings
-  clone_repo $ROOT_DIR qkthings
+clone_repo $ROOT_DIR qkthings
 
-  clone_repo $QKTHINGS_DIR embedded
-  clone_repo $QKTHINGS_DIR/embedded/ qkprogram
-  clone_repo $QKTHINGS_DIR/embedded/ qkperipheral
-  clone_repo $QKTHINGS_DIR/embedded/ qkdsp
+clone_repo $QKTHINGS_DIR embedded
+clone_repo $QKTHINGS_DIR/embedded qkprogram
+clone_repo $QKTHINGS_DIR/embedded qkperipheral
+clone_repo $QKTHINGS_DIR/embedded qkdsp
 
-  clone_repo $QKTHINGS_DIR software
-  clone_repo $QKTHINGS_DIR/software/ qkcore
-  clone_repo $QKTHINGS_DIR/software/ qkwidget
-  clone_repo $QKTHINGS_DIR/software/ qkapi
-  clone_repo $QKTHINGS_DIR/software/ qkdaemon
-  clone_repo $QKTHINGS_DIR/software/ qkide
-  clone_repo $QKTHINGS_DIR/software/ qkloader
-else
-  echo "! $QKTHINGS_DIR already exists (repos won't be cloned)"
-fi
+clone_repo $QKTHINGS_DIR/ software
+clone_repo $QKTHINGS_DIR/software qkcore
+clone_repo $QKTHINGS_DIR/software qkwidget
+clone_repo $QKTHINGS_DIR/software qkapi
+clone_repo $QKTHINGS_DIR/software qkdaemon
+clone_repo $QKTHINGS_DIR/software qkide
+clone_repo $QKTHINGS_DIR/software qkloader
+
+mkdir -p $ROOT_DIR/specs
+clone_repo $ROOT_DIR/specs spec_qkprotocol
+
 
 cd $DEV_DIR
 echo "Installing/checking embedded toolchain"
@@ -133,6 +132,6 @@ append_to_file ~/.profile QKTHINGS_LOCAL=$QKTHINGS_LOCAL
 
 source ~/.profile
 
-echo "\nDone! Now what?"
-echo "Building instructions: http://discourse.qkthings.com/t/building-instructions/20"
-echo "Give feedback, don't hesitate to get in touch. Happy hacking!"
+echo -e "\nDone! Now what?"
+echo -e "Building instructions: http://discourse.qkthings.com/t/building-instructions/20"
+echo -e "Give feedback, don't hesitate to get in touch. Happy hacking!"
